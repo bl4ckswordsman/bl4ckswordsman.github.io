@@ -1,8 +1,26 @@
 body {
-    background-color: #282c34;
+    background-color: #000000;
     color: #ffffff;
 }
 
 a {
     color: #61dafb;
+}
+
+#bgImage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 85px;
+    z-index: -1;
+    filter: blur(8px);
+}
+
+@media (max-width: 768px) {
+    #bgImage {
+        position: absolute;
+        width: 150px;
+        top: 50%;
+        left: 50%;
+    }
 }
