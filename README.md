@@ -1,5 +1,11 @@
-# A fancy homepage hosted in Github Pages
+## Simple Github Pages homepage
 
-## Used techniques:
-  -  Bootstrap
-  -  anime.js
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+## Thanks
+
+The following frameworks/libraries/components are used in this project:
+ - Next.js
+ - [shadcn/ui](https://ui.shadcn.com/)
+ - [Particles Background](https://codepen.io/technovore/pen/aOdGjY)
+ - [Particle ORB CSS](https://codepen.io/natewiley/pen/GgONKy)
