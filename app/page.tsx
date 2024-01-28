@@ -1,31 +1,37 @@
 "use client"
-import { Button } from "@/components/ui/button";
+import {Button} from "@/components/ui/button";
 import {Header} from "@/components/page-header";
-import { ParticleOrbBackground } from "@/components/particle-orb-background";
+//import { ParticleOrbBackground } from "@/components/particle-orb-background";
 import ParticlesBackground from "@/components/particles-background";
+import {FadeIn} from "@/components/fade-in";
 
 
 export default function HomePage() {
     return (
         <div>
-            <Header />
+            <Header/>
             <div className="particles-container">
-                <ParticlesBackground />
+                <ParticlesBackground/>
             </div>
-            <div className="content-container">
+            <div className="content-container" style={{justifyContent: 'center'}}>
                 <div className="wrap">
-                    {Array.from({ length: 10 }, (_, i) => (
+                    {Array.from({length: 10}, (_, i) => (
                         <div key={i} className="c"></div>
                     ))}
                 </div>
-                <h1>Welcome to my homepage</h1>
-                <p>Check out my Github repositories</p>
-
-                <a href="https://github.com/bl4ckswordsman?tab=repositories" target="_blank" role="button">
-                    <Button>
-                        View Repositories
-                    </Button>
-                </a>
+                <FadeIn>
+                    <h1 style={{fontSize: 'calc(2rem + 4vw)'}}>
+                        Welcome to my homepage
+                    </h1>
+                    <p style={{fontSize: 'calc(1rem + 2vw)'}}>
+                        Check out my Github repositories
+                    </p>
+                    <a href="https://github.com/bl4ckswordsman?tab=repositories" target="_blank" role="button">
+                        <Button>
+                            View Repositories
+                        </Button>
+                    </a>
+                </FadeIn>
             </div>
         </div>
     );
