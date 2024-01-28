@@ -1,6 +1,6 @@
 [Next.js version](https://blackswordsman.vercel.app/)
 
-[Static HTML version](https://bl4cskwordsman.github.io)
+[Static HTML version](https://bl4ckswordsman.github.io)
 
 ## Simple Github Pages homepage
 
