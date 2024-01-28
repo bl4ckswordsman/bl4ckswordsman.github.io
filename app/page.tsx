@@ -5,7 +5,6 @@ import {Header} from "@/components/page-header";
 import ParticlesBackground from "@/components/particles-background";
 import {FadeIn} from "@/components/fade-in";
 
-
 export default function HomePage() {
     return (
         <div>
