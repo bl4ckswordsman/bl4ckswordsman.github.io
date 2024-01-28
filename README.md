@@ -9,3 +9,4 @@ The following frameworks/libraries/components are used in this project:
  - [shadcn/ui](https://ui.shadcn.com/)
  - [Particles Background](https://codepen.io/technovore/pen/aOdGjY)
  - [Particle ORB CSS](https://codepen.io/natewiley/pen/GgONKy)
+ - [Motion Framer](https://www.framer.com/motion/)
