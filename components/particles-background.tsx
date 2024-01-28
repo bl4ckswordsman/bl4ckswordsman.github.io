@@ -7,6 +7,7 @@ const ParticlesBackground = () => {
 
     useEffect(() => {
         import('particles.js').then(() => {
+            // @ts-ignore
             const particlesJS = window.particlesJS;
 
             particlesJS('particles-js', {
@@ -65,7 +66,7 @@ const ParticlesBackground = () => {
                     },
                 },
                 "interactivity": {
-                    "detect_on": "canvas",
+                    "detect_on": "window",
                     "events": {
                         "onhover": {
                             "enable": true,
