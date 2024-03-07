@@ -1,3 +1,4 @@
+//"use client";
 import {motion, useAnimation} from 'framer-motion';
 import {ReactNode, useEffect} from 'react';
 

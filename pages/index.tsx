@@ -1,11 +1,11 @@
 "use client"
 import {Button} from "@/components/ui/button";
 import {Header} from "@/components/page-header";
-//import { ParticleOrbBackground } from "@/components/particle-orb-background";
 import ParticlesBackground from "@/components/particles-background";
 import {FadeIn} from "@/components/fade-in";
+import RootLayout from "@/app/layout";
 
-export default function HomePage() {
+const HomePage = () => {
     return (
         <div>
             <Header/>
@@ -33,5 +33,13 @@ export default function HomePage() {
                 </FadeIn>
             </div>
         </div>
+    );
+}
+
+export default function Index() {
+    return (
+        <RootLayout>
+            <HomePage/>
+        </RootLayout>
     );
 }
