@@ -26,9 +26,10 @@ export default function RootLayout({children}: RootLayoutProps) {
             <Head>
                 <title>{String(metadata.title) || 'Default Title'}</title>
                 <style>{`body { font-family: ${fontSans}; }`}</style>
+                <link rel="manifest" href="/manifest.json"/>
             </Head>
             <div className={cn('root-layout')}>
-                {children}
+            {children}
             </div>
         </ThemeProvider>
     )
