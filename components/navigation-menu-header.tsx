@@ -38,7 +38,7 @@ export function NaviMenu() {
     const allowedDomains = ["github.com"]; // Add your allowed domains here
 
     return (
-        <Navbar onMenuOpenChange={setIsMenuOpen}>
+        <Navbar isBordered onMenuOpenChange={setIsMenuOpen}>
 
             <NavbarContent>
                 <NavbarMenuToggle

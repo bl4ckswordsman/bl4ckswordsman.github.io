@@ -51,7 +51,7 @@ const HitsPage = () => {
                 <ResizableHandle withHandle/>
                 <ResizablePanel defaultSize={65}>
                     {repo && (
-                        <div className="w-screen m-3">
+                        <div className="w-full p-3 overflow-auto">
                             <div style={{transform: 'scale(0.7)', transformOrigin: '0 0'}}>
                                 <iframe id="contentiframe"
                                         className="w-[660px] h-[310px] border-0"
@@ -70,9 +70,11 @@ export default function Hits() {
     return (
         <RootLayout>
             <Header/>
-            <FadeIn>
-                <HitsPage/>
-            </FadeIn>
+            <div className="max-w-screen-lg mx-auto"> {/* Match the max width of the navbar */}
+                <FadeIn>
+                    <HitsPage/>
+                </FadeIn>
+            </div>
         </RootLayout>
-    );
+);
 }

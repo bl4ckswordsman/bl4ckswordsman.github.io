@@ -8,7 +8,6 @@ import RootLayout from "@/app/layout";
 const HomePage = () => {
     return (
         <div>
-            <Header/>
             <div className="particles-container">
                 <ParticlesBackground/>
             </div>
@@ -39,7 +38,10 @@ const HomePage = () => {
 export default function Index() {
     return (
         <RootLayout>
-            <HomePage/>
+            <Header/>
+            <div className="max-w-screen-lg mx-auto"> {/* Match the max width of the navbar */}
+                <HomePage/>
+            </div>
         </RootLayout>
-    );
+);
 }
