@@ -8,21 +8,8 @@ import {NaviMenu} from "@/components/navigation-menu-header";
 
 export const Header = () => {
     return (
-        <header className="flex justify-between items-center p-4">
+        <header className="flex justify-between items-center ">
             <NaviMenu/>
-{/*            <Badge variant="outline">
-                <div className="text-2xl font-bold">
-                    <Link href="/" passHref>
-                        <Button variant="link" className="text-primary">
-                            bl4ckswordsman
-                        </Button>
-                    </Link>
-                </div>
-            </Badge>*/}
-            <div className="flex space-x-2">
-                <GithubButton link="https://github.com/bl4ckswordsman"/>
-                <ModeToggle/>
-            </div>
         </header>
     );
 };

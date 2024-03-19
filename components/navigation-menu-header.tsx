@@ -1,59 +1,90 @@
-"use client"
-
-import * as React from "react"
-import Link from "next/link"
-
-import {cn} from "@/lib/utils"
+import {useState} from "react";
 import {
-    NavigationMenu,
-    NavigationMenuContent,
-    NavigationMenuItem,
-    NavigationMenuLink,
-    NavigationMenuList,
-    NavigationMenuTrigger,
-    navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu"
+    Navbar,
+    NavbarBrand,
+    NavbarContent,
+    NavbarItem,
+    NavbarMenuToggle,
+    NavbarMenu,
+    NavbarMenuItem,
+    Link
+} from "@nextui-org/react";
+import {GithubButton} from "@/components/github-button";
+import {ModeToggle} from '@/components/mode-toggle';
 
-export function NaviMenu() {
-    return (
-        <NavigationMenu>
-            <NavigationMenuList>
-                <NavigationMenuItem>
-                    <NavigationMenuTrigger>bl4ckswordsman</NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                        <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                            <ListItem href="/" title="Home"></ListItem>
-                            <ListItem href="/hits" title="Github daily hits"></ListItem>
-                        </ul>
-                    </NavigationMenuContent>
-                </NavigationMenuItem>
-            </NavigationMenuList>
-        </NavigationMenu>
-    )
+function isValidUrl(url: string, allowedDomains: string[]): boolean {
+    if (url.startsWith('/')) {
+        return true;  // Allow relative URLs
+    }
+
+    try {
+        const urlObj = new URL(url);
+        return allowedDomains.includes(urlObj.hostname);
+    } catch (err) {
+        return false;
+    }
 }
 
-const ListItem = React.forwardRef<
-    React.ElementRef<"a">,
-    React.ComponentPropsWithoutRef<"a">
->(({className, title, children, ...props}, ref) => {
+export function NaviMenu() {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    const menuItems = [
+        {title: "Home", href: "/"}, // Index 0
+        {title: "Github daily hits", href: "/hits"}
+    ];
+
+    const homeLink = menuItems[0].href;
+
+    const allowedDomains = ["github.com"]; // Add your allowed domains here
+
     return (
-        <li>
-            <NavigationMenuLink asChild>
-                <a
-                    ref={ref}
-                    className={cn(
-                        "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-                        className
-                    )}
-                    {...props}
-                >
-                    <div className="text-sm font-medium leading-none">{title}</div>
-                    <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                        {children}
-                    </p>
-                </a>
-            </NavigationMenuLink>
-        </li>
+        <Navbar onMenuOpenChange={setIsMenuOpen}>
+
+            <NavbarContent>
+                <NavbarMenuToggle
+                    aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+                    className="sm:hidden"
+                />
+                <NavbarBrand>
+                    <Link color="foreground" href={homeLink}>
+                        <p className="font-bold text-inherit">bl4ckswordsman</p>
+                    </Link>
+                </NavbarBrand>
+            </NavbarContent>
+
+            <NavbarContent className="hidden sm:flex gap-4" justify="center">
+                {menuItems.map((item, index) => (
+                    isValidUrl(item.href, allowedDomains) && (
+                        <NavbarItem key={index}>
+                            <Link color="foreground" href={item.href}>
+                                {item.title}
+                            </Link>
+                        </NavbarItem>
+                    )
+                ))}
+                <div className="flex space-x-2">
+                    <GithubButton link="https://github.com/bl4ckswordsman"/>
+                    <ModeToggle/>
+                </div>
+            </NavbarContent>
+
+            <NavbarMenu>
+                {menuItems.map((item, index) => (
+                    isValidUrl(item.href, allowedDomains) && (
+                        <NavbarMenuItem key={index}>
+                            <Link color="foreground" href={item.href}>
+                                {item.title}
+                            </Link>
+                        </NavbarMenuItem>
+                    )
+                ))}
+                <NavbarMenuItem>
+                    <div className="flex space-x-2">
+                        <GithubButton link="https://github.com/bl4ckswordsman"/>
+                        <ModeToggle/>
+                    </div>
+                </NavbarMenuItem>
+            </NavbarMenu>
+        </Navbar>
     )
-})
-ListItem.displayName = "ListItem"
+}
