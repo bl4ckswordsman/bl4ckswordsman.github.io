@@ -25,6 +25,8 @@ const HitsPage = () => {
         setRepo(repo);
     };
 
+    const dailyHitsBaseUrl = 'https://hits.seeyoufarm.com/api/count/graph/dailyhits.svg?url=https://github.com/';
+
     return (
         <div className="m-4">
             <ResizablePanelGroup
@@ -55,7 +57,7 @@ const HitsPage = () => {
                             <div style={{transform: 'scale(0.7)', transformOrigin: '0 0'}}>
                                 <iframe id="contentiframe"
                                         className="w-[660px] h-[310px] border-0"
-                                        src={`https://hits.seeyoufarm.com/api/count/graph/dailyhits.svg?url=https://github.com/${repo}`}></iframe>
+                                        src={`${dailyHitsBaseUrl}${repo}`}></iframe>
                             </div>
                         </div>
                     )}
@@ -76,5 +78,5 @@ export default function Hits() {
                 </FadeIn>
             </div>
         </RootLayout>
-);
+    );
 }
