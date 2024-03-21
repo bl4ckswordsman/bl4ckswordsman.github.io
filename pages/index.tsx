@@ -11,7 +11,7 @@ const HomePage = () => {
             <div className="particles-container">
                 <ParticlesBackground/>
             </div>
-            <div className="content-container" style={{justifyContent: 'center'}}>
+            <div className="content-container flex items-center justify-center">
                 <div className="wrap">
                     {Array.from({length: 10}, (_, i) => (
                         <div key={i} className="c"></div>
