@@ -10,6 +10,8 @@ import copy from 'copy-to-clipboard';
 import {Separator} from "@/components/ui/separator";
 
 const PortfolioPage = () => {
+    const email = process.env.NEXT_PUBLIC_APP_EMAIL || 'email-not-set@e.com';
+
     return (
         <div className="p-6">
             <Card className="p-3">
@@ -91,7 +93,7 @@ const PortfolioPage = () => {
                             <TooltipTrigger asChild>
                                 <Button
                                     variant={"secondary"}
-                                    onClick={() => copy('example@email.com')}>
+                                    onClick={() => copy(email)}>
                                     Copy Email
                                 </Button>
                             </TooltipTrigger>
