@@ -55,7 +55,7 @@ const renderAccordionItems = (data: any, keys: string[]) => {
 };
 
 const PortfolioPage = () => {
-    const [portfolio, setPortfolio] = useState<Record<string, any> | null>(null);
+    const [portfolio, setPortfolio] = useState<Record<string, any> | null>({});
     const cardYSpacing = 8;
     const email = process.env.NEXT_PUBLIC_APP_EMAIL || 'email-not-set@e.com';
 
