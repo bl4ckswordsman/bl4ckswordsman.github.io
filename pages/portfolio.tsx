@@ -14,6 +14,8 @@ import {CopyEmailButton, SendEmailButton} from "@/components/email-buttons";
 import {Divider} from "@nextui-org/divider";
 import {FadeIn} from "@/components/fade-in";
 import {LoadingSkeleton} from "@/components/loading-skeleton";
+import {Toaster} from "@/components/ui/sonner"
+import {toast} from "sonner";
 
 /*// Encryption example
 const encrypted = encrypt('Hello World!');
@@ -22,17 +24,32 @@ console.log('Encrypted:', encrypted);
 
 const decrypted = decrypt(encrypted);
 console.log('Decrypted:', decrypted);*/
+const ErrorAlert = () => {
+    toast.error("Could not load data from the database.", {
+        action: {
+            label: "Retry",
+            onClick: () => window.location.reload(),
+        },
+    });
+    return null;
+};
+
+const AccordionItemMemo = React.memo(AccordionItem);
 
 const renderAccordionItems = (data: any, keys: string[]) => {
+    if (!data) {
+        //handle runtime errors better by returning a default value
+        return null; // or return a loading indicator, or some other default value
+    }
     return keys.map(key => {
         const {title, descr} = data[key];
         return (
-            <AccordionItem key={key} value={key}>
+            <AccordionItemMemo key={key} value={key}>
                 <AccordionTrigger>{title}</AccordionTrigger>
                 <AccordionContent>
                     <p>{descr}</p>
                 </AccordionContent>
-            </AccordionItem>
+            </AccordionItemMemo>
         );
     });
 };
@@ -44,10 +61,12 @@ const PortfolioPage = () => {
 
     useEffect(() => {
         // Use the fetch API to get data from your API route
-        fetch('/api/portfolio')
+        fetch('/api/internal/portfolio', {
+            credentials: 'same-origin',
+        })
             .then(response => response.json())
             .then(data => setPortfolio(data))
-            .catch(error => console.log('Fetching portfolio data failed:', error));
+            .catch(error => console.error('Fetching portfolio data failed:', error));
     }, []);
 
 
@@ -67,7 +86,8 @@ const PortfolioPage = () => {
                         <CardBody>
                             <section id="skills">
                                 <Accordion type="single" collapsible>
-                                    {renderAccordionItems(portfolio.skills, Object.keys(portfolio.skills))}
+                                    {portfolio.skills ? renderAccordionItems(portfolio.skills, Object.keys(portfolio.skills)) :
+                                        <ErrorAlert/>}
                                 </Accordion>
                             </section>
                         </CardBody>
@@ -82,7 +102,7 @@ const PortfolioPage = () => {
                         <CardBody>
                             <section id="experience">
                                 <Accordion type="single" collapsible>
-                                    {renderAccordionItems(portfolio.experience, Object.keys(portfolio.experience))}
+                                    {portfolio.experience ? renderAccordionItems(portfolio.experience, Object.keys(portfolio.experience)) : null}
                                 </Accordion>
                             </section>
                         </CardBody>
@@ -97,7 +117,7 @@ const PortfolioPage = () => {
                         <CardBody>
                             <section id="education">
                                 <Accordion type="single" collapsible>
-                                    {renderAccordionItems(portfolio.education, Object.keys(portfolio.education))}
+                                    {portfolio.education ? renderAccordionItems(portfolio.education, Object.keys(portfolio.education)) : null}
                                 </Accordion>
                             </section>
                         </CardBody>
@@ -112,9 +132,13 @@ const PortfolioPage = () => {
                         <CardBody>
                             <section id="languages">
                                 {
-                                    Object.entries(portfolio.languages).map(([key, value]) => (
-                                        <Badge key={key} color="primary">{String(value)}</Badge>
-                                    ))
+                                    portfolio.languages && (
+                                        <div className="flex space-x-2">
+                                            {Object.keys(portfolio.languages).map(key => (
+                                                <Badge key={key} variant="default">{portfolio.languages[key]}</Badge>
+                                            ))}
+                                        </div>
+                                    )
                                 }
                             </section>
                         </CardBody>
@@ -151,6 +175,7 @@ export default function Portfolio() {
             <Header/>
             <div className="max-w-screen-lg mx-auto"> {/* Match the max width of the navbar */}
                 <PortfolioPage/>
+                <Toaster/>
             </div>
         </RootLayout>
     );
