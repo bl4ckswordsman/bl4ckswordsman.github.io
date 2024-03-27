@@ -68,9 +68,17 @@ export const AccordionSection = ({data}: { data: any }) => (
 export const LanguagesSection = ({languages}: { languages: any }) => (
     <section id="languages">
         {languages && (
-            <div className="flex space-x-2">
+            <div className="flex flex-wrap space-x-1 space-y-1 items-center">
                 {Object.keys(languages).map(key => (
-                    <Badge key={key} variant="default">{languages[key]}</Badge>
+                    <div key={key}>
+                        <Badge className="flex-col">
+                            <Badge>{(languages[key] as { language: string, proficiency: string }).language}</Badge>
+                            <Badge variant="secondary">{(languages[key] as {
+                                language: string,
+                                proficiency: string
+                            }).proficiency}</Badge>
+                        </Badge>
+                    </div>
                 ))}
             </div>
         )}
