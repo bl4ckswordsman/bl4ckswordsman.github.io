@@ -174,7 +174,7 @@ const PortfolioPage = () => {
 
 export default function Portfolio() {
     return (
-        <RootLayout>
+        <RootLayout titleKey={"portfolio"}>
             <Header/>
             <div className="max-w-screen-lg mx-auto"> {/* Match the max width of the navbar */}
                 <PortfolioPage/>

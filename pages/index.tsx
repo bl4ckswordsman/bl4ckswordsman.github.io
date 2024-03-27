@@ -37,7 +37,7 @@ const HomePage = () => {
 
 export default function Index() {
     return (
-        <RootLayout>
+        <RootLayout titleKey={"home"}>
             <Header/>
             <div className="max-w-screen-lg mx-auto"> {/* Match the max width of the navbar */}
                 <HomePage/>

@@ -3,8 +3,8 @@ import {Inter as FontSans} from "next/font/google"
 import "@/app/globals.css";
 import {ThemeProvider} from "@/components/theme-provider"
 import {cn} from "@/lib/utils";
-import Head from 'next/head';
 import React from "react";
+import {Helmet} from "react-helmet";
 
 const fontSans = FontSans({
     subsets: ["latin"],
@@ -13,22 +13,23 @@ const fontSans = FontSans({
 
 interface RootLayoutProps {
     children: React.ReactNode;
+    titleKey: keyof typeof metadata.titles;
 }
 
-export default function RootLayout({children}: RootLayoutProps) {
+export default function RootLayout(props: RootLayoutProps) {
     return (
         <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
-            disableTransitionOnChange
         >
-            <Head>
-                <title>{String(metadata.title) || 'Default Title'}</title>
+            <Helmet>
+                <title>{metadata.titles[props.titleKey]}</title>
+                <meta name="description" content={metadata.description || 'Welcome to my homepage'}/>
                 <style>{`body { font-family: ${fontSans}; }`}</style>
-            </Head>
+            </Helmet>
             <div className={cn('root-layout')}>
-            {children}
+                {props.children}
             </div>
         </ThemeProvider>
     )

@@ -1,6 +1,11 @@
-import type {Metadata} from "next";
-
-export const metadata: Metadata = {
-    title: "Index page",
-    description: "bl4ckswordsman's home page",
+const base = "bl4ckswordsman";
+export const metadata = {
+    titles: {
+        home: base,
+        portfolio: base + " | Portfolio",
+        hits: base + " | Daily GitHub Hits",
+        repos: base + " | GitHub Repositories",
+        // Other page titles to be added here
+    },
+    description: base + "'s home page",
 };

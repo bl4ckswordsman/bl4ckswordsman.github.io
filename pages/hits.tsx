@@ -70,7 +70,7 @@ const HitsPage = () => {
 
 export default function Hits() {
     return (
-        <RootLayout>
+        <RootLayout titleKey={"hits"}>
             <Header/>
             <div className="max-w-screen-lg mx-auto"> {/* Match the max width of the navbar */}
                 <FadeIn>
