@@ -16,6 +16,7 @@ import {FadeIn} from "@/components/fade-in";
 import {LoadingSkeleton} from "@/components/loading-skeleton";
 import {Toaster} from "@/components/ui/sonner"
 import {toast} from "sonner";
+import firebase from "firebase/analytics";
 
 /*// Encryption example
 const encrypted = encrypt('Hello World!');
@@ -59,6 +60,8 @@ const PortfolioPage = () => {
     const cardYSpacing = 8;
     const email = process.env.NEXT_PUBLIC_APP_EMAIL || 'email-not-set@e.com';
 
+    ///////////////// ANALYTICS /////////////////
+
     useEffect(() => {
         // Use the fetch API to get data from your API route
         fetch('/api/internal/portfolio', {
@@ -70,7 +73,7 @@ const PortfolioPage = () => {
     }, []);
 
 
-    if (!portfolio) {
+    if (!portfolio || Object.keys(portfolio).length === 0) {
         return <LoadingSkeleton loadingText="Loading data from the database..."/>;
     }
 
