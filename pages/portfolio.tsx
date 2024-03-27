@@ -2,58 +2,14 @@ import React, {useEffect, useState} from 'react';
 import {Header} from "@/components/page-header";
 import RootLayout from "@/app/layout";
 import {Card} from "@/components/ui/card";
-import {Accordion, AccordionItem, AccordionTrigger, AccordionContent} from "@/components/ui/accordion";
-import {Badge} from "@/components/ui/badge";
-import {
-    Spacer,
-    Card as CardNextUI,
-    CardBody,
-    CardHeader as CardHeaderNextUI
-} from "@nextui-org/react";
-import {CopyEmailButton, SendEmailButton} from "@/components/email-buttons";
-import {Divider} from "@nextui-org/divider";
+import {Spacer} from "@nextui-org/react";
 import {FadeIn} from "@/components/fade-in";
 import {LoadingSkeleton} from "@/components/loading-skeleton";
 import {Toaster} from "@/components/ui/sonner"
-import {toast} from "sonner";
+import {PortfolioCard, AccordionSection, LanguagesSection, ContactSection} from "@/components/portfolio-comp";
+
 import firebase from "firebase/analytics";
 
-/*// Encryption example
-const encrypted = encrypt('Hello World!');
-
-console.log('Encrypted:', encrypted);
-
-const decrypted = decrypt(encrypted);
-console.log('Decrypted:', decrypted);*/
-const ErrorAlert = () => {
-    toast.error("Could not load data from the database.", {
-        action: {
-            label: "Retry",
-            onClick: () => window.location.reload(),
-        },
-    });
-    return null;
-};
-
-const AccordionItemMemo = React.memo(AccordionItem);
-
-const renderAccordionItems = (data: any, keys: string[]) => {
-    if (!data) {
-        //handle runtime errors better by returning a default value
-        return null; // or return a loading indicator, or some other default value
-    }
-    return keys.map(key => {
-        const {title, descr} = data[key];
-        return (
-            <AccordionItemMemo key={key} value={key}>
-                <AccordionTrigger>{title}</AccordionTrigger>
-                <AccordionContent>
-                    <p>{descr}</p>
-                </AccordionContent>
-            </AccordionItemMemo>
-        );
-    });
-};
 
 const PortfolioPage = () => {
     const [portfolio, setPortfolio] = useState<Record<string, any> | null>({});
@@ -64,7 +20,7 @@ const PortfolioPage = () => {
 
     useEffect(() => {
         // Use the fetch API to get data from your API route
-        fetch('/api/internal/portfolio', {
+        fetch('/api/internal/portfolio2', {
             credentials: 'same-origin',
         })
             .then(response => response.json())
@@ -81,91 +37,25 @@ const PortfolioPage = () => {
         <FadeIn>
             <div className="p-6">
                 <Card className="p-3">
-                    <CardNextUI>
-                        <CardHeaderNextUI>
-                            <h2>Skills</h2>
-                        </CardHeaderNextUI>
-                        <Divider/>
-                        <CardBody>
-                            <section id="skills">
-                                <Accordion type="single" collapsible>
-                                    {portfolio.skills ? renderAccordionItems(portfolio.skills, Object.keys(portfolio.skills)) :
-                                        <ErrorAlert/>}
-                                </Accordion>
-                            </section>
-                        </CardBody>
-                    </CardNextUI>
-
+                    <PortfolioCard title="Skills" data={portfolio.skills} renderContent={data => (
+                        <AccordionSection data={data}/>
+                    )}/>
                     <Spacer y={cardYSpacing}/>
-                    <CardNextUI>
-                        <CardHeaderNextUI>
-                            <h2>Experience</h2>
-                        </CardHeaderNextUI>
-                        <Divider/>
-                        <CardBody>
-                            <section id="experience">
-                                <Accordion type="single" collapsible>
-                                    {portfolio.experience ? renderAccordionItems(portfolio.experience, Object.keys(portfolio.experience)) : null}
-                                </Accordion>
-                            </section>
-                        </CardBody>
-                    </CardNextUI>
-
+                    <PortfolioCard title="Experience" data={portfolio.experience} renderContent={data => (
+                        <AccordionSection data={data}/>
+                    )}/>
                     <Spacer y={cardYSpacing}/>
-                    <CardNextUI>
-                        <CardHeaderNextUI>
-                            <h2>Education</h2>
-                        </CardHeaderNextUI>
-                        <Divider/>
-                        <CardBody>
-                            <section id="education">
-                                <Accordion type="single" collapsible>
-                                    {portfolio.education ? renderAccordionItems(portfolio.education, Object.keys(portfolio.education)) : null}
-                                </Accordion>
-                            </section>
-                        </CardBody>
-                    </CardNextUI>
-
+                    <PortfolioCard title="Education" data={portfolio.education} renderContent={data => (
+                        <AccordionSection data={data}/>
+                    )}/>
                     <Spacer y={cardYSpacing}/>
-                    <CardNextUI>
-                        <CardHeaderNextUI>
-                            <h2>Languages</h2>
-                        </CardHeaderNextUI>
-                        <Divider/>
-                        <CardBody>
-                            <section id="languages">
-                                {
-                                    portfolio.languages && (
-                                        <div className="flex space-x-2">
-                                            {Object.keys(portfolio.languages).map(key => (
-                                                <Badge key={key} variant="default">{portfolio.languages[key]}</Badge>
-                                            ))}
-                                        </div>
-                                    )
-                                }
-                            </section>
-                        </CardBody>
-                    </CardNextUI>
-
+                    <PortfolioCard title="Languages" data={portfolio.languages} renderContent={data => (
+                        <LanguagesSection languages={data}/>
+                    )}/>
                     <Spacer y={cardYSpacing}/>
-                    <CardNextUI>
-                        <CardHeaderNextUI>
-                            <h2>Contact Me</h2>
-                        </CardHeaderNextUI>
-                        <Divider/>
-                        <CardBody>
-                            <section id="contact">
-                                <CardNextUI className="w-fit p-2">
-                                    <h3 className="p-2">Email</h3>
-                                    <div className="flex ">
-                                        <CopyEmailButton email={email}/>
-                                        <Spacer x={2}/>
-                                        <SendEmailButton email={email}/>
-                                    </div>
-                                </CardNextUI>
-                            </section>
-                        </CardBody>
-                    </CardNextUI>
+                    <PortfolioCard title="Contact Me" data={email} renderContent={data => (
+                        <ContactSection email={data}/>
+                    )}/>
                 </Card>
             </div>
         </FadeIn>
