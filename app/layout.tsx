@@ -5,6 +5,7 @@ import {ThemeProvider} from "@/components/theme-provider"
 import {cn} from "@/lib/utils";
 import React from "react";
 import {Helmet} from "react-helmet";
+import {SpeedInsights} from "@vercel/speed-insights/next";
 
 const fontSans = FontSans({
     subsets: ["latin"],
@@ -31,6 +32,7 @@ export default function RootLayout(props: RootLayoutProps) {
             <div className={cn('root-layout')}>
                 {props.children}
             </div>
+            <SpeedInsights/>
         </ThemeProvider>
     )
 }
