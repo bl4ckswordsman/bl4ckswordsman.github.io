@@ -20,7 +20,7 @@ const PortfolioPage = () => {
 
     useEffect(() => {
         // Use the fetch API to get data from your API route
-        fetch('/api/internal/portfolio2', {
+        fetch('/api/internal/portfolio', {
             credentials: 'same-origin',
         })
             .then(response => response.json())
