@@ -6,6 +6,7 @@ import {cn} from "@/lib/utils";
 import React from "react";
 import {Helmet} from "react-helmet";
 import {SpeedInsights} from "@vercel/speed-insights/next";
+import {Analytics} from "@vercel/analytics/react";
 
 const fontSans = FontSans({
     subsets: ["latin"],
@@ -33,6 +34,7 @@ export default function RootLayout(props: RootLayoutProps) {
                 {props.children}
             </div>
             <SpeedInsights/>
+            <Analytics/>
         </ThemeProvider>
     )
 }

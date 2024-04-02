@@ -7,8 +7,7 @@ import {FadeIn} from "@/components/fade-in";
 import {LoadingSkeleton} from "@/components/loading-skeleton";
 import {Toaster} from "@/components/ui/sonner"
 import {PortfolioCard, AccordionSection, LanguagesSection, ContactSection} from "@/components/portfolio-comp";
-
-import firebase from "firebase/analytics";
+/*import firebase from "firebase/analytics";*/
 
 
 const PortfolioPage = () => {
