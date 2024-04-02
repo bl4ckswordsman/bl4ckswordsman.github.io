@@ -9,13 +9,10 @@ import {Toaster} from "@/components/ui/sonner"
 import {PortfolioCard, AccordionSection, LanguagesSection, ContactSection} from "@/components/portfolio-comp";
 /*import firebase from "firebase/analytics";*/
 
-
 const PortfolioPage = () => {
     const [portfolio, setPortfolio] = useState<Record<string, any> | null>({});
     const cardYSpacing = 8;
     const email = process.env.NEXT_PUBLIC_APP_EMAIL || 'email-not-set@e.com';
-
-    ///////////////// ANALYTICS /////////////////
 
     useEffect(() => {
         // Use the fetch API to get data from your API route
