@@ -23,10 +23,9 @@ const NAV_ITEMS = [
     {
         name: 'Github',
         component: (props: { minWidthClass?: string }) => <GithubMenuDropdown minWidthClass={props.minWidthClass}
-                                                                              items={[
-                                                                                  {name: 'Daily hits', href: '/hits'},
-                                                                              ]}/>
-    },
+        items={[
+            {name: 'Daily hits', href: '/hits'},
+        ]}/>},
     {name: 'Portfolio', href: '/portfolio'},
     //{name: 'Projects', href: '/projects'},
     //{name: 'Admin', href: '/admin'},
@@ -90,7 +89,7 @@ export function NaviMenu() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     return (
-        <Navbar position="sticky" /*shouldHideOnScroll*/ isBordered
+        <Navbar shouldHideOnScroll isBordered
                 isMenuOpen={isMenuOpen}
                 onMenuOpenChange={setIsMenuOpen}>
             <NavbarContent>
