@@ -22,9 +22,10 @@ import {GithubMenuDropdown} from "@/components/navbar-dropdowns";
 const NAV_ITEMS = [
     {
         name: 'Github',
-        component: (props: { minWidthClass?: string }) => <GithubMenuDropdown minWidthClass={props.minWidthClass} items={[
-            {name: 'Daily hits', href: '/hits'},
-        ]}/>
+        component: (props: { minWidthClass?: string }) => <GithubMenuDropdown minWidthClass={props.minWidthClass}
+                                                                              items={[
+                                                                                  {name: 'Daily hits', href: '/hits'},
+                                                                              ]}/>
     },
     {name: 'Portfolio', href: '/portfolio'},
     //{name: 'Projects', href: '/projects'},
@@ -39,7 +40,7 @@ interface NavbarItemLinkProps {
     minWidthClass?: string;
 }
 
-const NavbarItemLink: React.FC<NavbarItemLinkProps> = ({ href, children, minWidthClass }) => (
+const NavbarItemLink: React.FC<NavbarItemLinkProps> = ({href, children, minWidthClass}) => (
     <NavbarItem>
         <NextLink href={href} legacyBehavior passHref>
             <NavigationMenuLink className={`${navigationMenuTriggerStyle()} ${minWidthClass}`}>
@@ -54,20 +55,24 @@ interface MenuItemsProps {
     minWidthClass?: string;
 }
 
-const NavbarItemComponent: React.FC<{ component: React.ElementType, minWidthClass?: string }> = ({component: Component, minWidthClass}) => (
+const NavbarItemComponent: React.FC<{ component: React.ElementType, minWidthClass?: string }> = ({
+                                                                                                     component: Component,
+                                                                                                     minWidthClass
+                                                                                                 }) => (
     <NavbarItem>
         <Component minWidthClass={minWidthClass}/>
     </NavbarItem>
 );
 
-const MenuItems: React.FC<MenuItemsProps> = ({ classname, minWidthClass }) => (
+const MenuItems: React.FC<MenuItemsProps> = ({classname, minWidthClass}) => (
     <NavigationMenu>
         <NavigationMenuList>
             <div className={`sm:flex sm:space-x-2 ${classname}`}>
                 {NAV_ITEMS.map((item, index) =>
                     item.component
-                        ? <NavbarItemComponent key={index} component={item.component} minWidthClass={minWidthClass} />
-                        : <NavbarItemLink key={index} href={item.href} minWidthClass={minWidthClass}>{item.name}</NavbarItemLink>
+                        ? <NavbarItemComponent key={index} component={item.component} minWidthClass={minWidthClass}/>
+                        : <NavbarItemLink key={index} href={item.href}
+                                          minWidthClass={minWidthClass}>{item.name}</NavbarItemLink>
                 )}
             </div>
         </NavigationMenuList>
@@ -85,7 +90,9 @@ export function NaviMenu() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     return (
-        <Navbar position="sticky" /*shouldHideOnScroll*/ isBordered onMenuOpenChange={setIsMenuOpen}>
+        <Navbar position="sticky" /*shouldHideOnScroll*/ isBordered
+                isMenuOpen={isMenuOpen}
+                onMenuOpenChange={setIsMenuOpen}>
             <NavbarContent>
                 <NavbarMenuToggle
                     aria-label={isMenuOpen ? "Close menu" : "Open menu"}
