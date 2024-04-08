@@ -8,8 +8,6 @@ const handlePortfolioRequest = async (req: NextApiRequest, res: NextApiResponse)
 
     const origin = req.headers.origin || req.headers.referer;
     if (!origin/* || new URL(origin).hostname !== req.headers.host*/) {
-        console.log('Current origin:', origin);
-        console.log('Request origin:', req.headers.host);
         console.error('Request not from same origin');
         return res.status(403).json({error: 'Forbidden'});
     }
