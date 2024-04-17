@@ -1,11 +1,14 @@
-const base = "bl4ckswordsman";
+const firstBase = "bl4ckswordsman";
+const secondBase = "amarildo";
+
 export const metadata = {
     titles: {
-        home: base,
-        portfolio: base + " | Portfolio",
-        hits: base + " | Daily GitHub Hits",
-        repos: base + " | GitHub Repositories",
+        home: firstBase,
+        portfolio: firstBase + " | Portfolio",
+        hits: firstBase + " | Daily GitHub Hits",
+        repos: firstBase + " | GitHub Repositories",
         // Other page titles to be added here
     },
-    description: base + "'s home page",
+    description: `🚀 Explore the digital realm with ${firstBase} (aka ${secondBase})!
+     Coding magic ✨, tech treasures 🖥️, and much more! (≧◡≦)`,
 };
