@@ -7,6 +7,7 @@ import React from "react";
 import {Helmet} from "react-helmet";
 import {SpeedInsights} from "@vercel/speed-insights/next";
 import {Analytics} from "@vercel/analytics/react";
+import {NaviMenu} from "@/components/navigation-menu-header";
 
 const fontSans = FontSans({
     subsets: ["latin"],
@@ -30,8 +31,11 @@ export default function RootLayout(props: RootLayoutProps) {
                 <meta name="description" content={metadata.description || 'Welcome to my homepage'}/>
                 <style>{`body { font-family: ${fontSans}; }`}</style>
             </Helmet>
+            <NaviMenu/>
             <div className={cn('root-layout')}>
-                {props.children}
+                <div className="max-w-screen-lg mx-auto"> {/* Match the max width of the navbar */}
+                    {props.children}
+                </div>
             </div>
             <SpeedInsights/>
             <Analytics/>

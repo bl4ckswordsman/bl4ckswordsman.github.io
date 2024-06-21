@@ -1,6 +1,5 @@
 "use client"
 import {Button} from "@/components/ui/button";
-import {Header} from "@/components/page-header";
 import ParticlesBackground from "@/components/particles-background";
 import {FadeIn} from "@/components/fade-in";
 import RootLayout from "@/app/layout";
@@ -38,10 +37,7 @@ const HomePage = () => {
 export default function Index() {
     return (
         <RootLayout titleKey={"home"}>
-            <Header/>
-            <div className="max-w-screen-lg mx-auto"> {/* Match the max width of the navbar */}
-                <HomePage/>
-            </div>
+            <HomePage/>
         </RootLayout>
-);
+    );
 }

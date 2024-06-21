@@ -1,7 +1,6 @@
 "use client"
 import "@/app/layout";
 import React, {useState} from 'react';
-import {Header} from "@/components/page-header";
 import RootLayout from "@/app/layout";
 import {FadeIn} from "@/components/fade-in";
 import {Button} from "@/components/ui/button";
@@ -71,12 +70,9 @@ const HitsPage = () => {
 export default function Hits() {
     return (
         <RootLayout titleKey={"hits"}>
-            <Header/>
-            <div className="max-w-screen-lg mx-auto"> {/* Match the max width of the navbar */}
-                <FadeIn>
-                    <HitsPage/>
-                </FadeIn>
-            </div>
+            <FadeIn>
+                <HitsPage/>
+            </FadeIn>
         </RootLayout>
     );
 }

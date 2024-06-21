@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {Header} from "@/components/page-header";
 import RootLayout from "@/app/layout";
 import {Card} from "@/components/ui/card";
 import {Spacer} from "@nextui-org/react";
@@ -61,11 +60,8 @@ const PortfolioPage = () => {
 export default function Portfolio() {
     return (
         <RootLayout titleKey={"portfolio"}>
-            <Header/>
-            <div className="max-w-screen-lg mx-auto"> {/* Match the max width of the navbar */}
-                <PortfolioPage/>
-                <Toaster/>
-            </div>
+            <PortfolioPage/>
+            <Toaster/>
         </RootLayout>
     );
 }
