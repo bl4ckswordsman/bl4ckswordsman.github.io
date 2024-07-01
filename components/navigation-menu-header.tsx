@@ -22,7 +22,7 @@ import {clsx} from "clsx";
 import {usePathname} from "next/navigation";
 import {Button} from "@/components/ui/button";
 
-const NAV_ITEMS = [
+export const NAV_ITEMS = [
     {
         name: 'Github',
         component: (props: { minWidthClass?: string }) =>

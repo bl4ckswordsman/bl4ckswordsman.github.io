@@ -10,12 +10,12 @@ import {usePathname} from "next/navigation";
 import {Button} from "@/components/ui/button";
 import NextLink from "next/link";
 
-interface DropdownItem {
+export interface DropdownItem {
     name: string;
     href: string;
 }
 
-interface GithubMenuDropdownProps {
+export interface GithubMenuDropdownProps {
     items: DropdownItem[];
     minWidthClass?: string;
 }
