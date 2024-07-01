@@ -5,6 +5,7 @@ export const metadata = {
     titles: {
         home: firstBase,
         portfolio: firstBase + " | Portfolio",
+        github: firstBase + " | GitHub",
         hits: firstBase + " | Daily GitHub Hits",
         repos: firstBase + " | GitHub Repositories",
         // Other page titles to be added here
