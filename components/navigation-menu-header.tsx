@@ -1,3 +1,4 @@
+"use client"
 import React, {useState} from "react";
 import {
     Navbar,
@@ -12,20 +13,24 @@ import {GithubButton} from "@/components/github-button";
 import {ModeToggle} from '@/components/mode-toggle';
 import {
     NavigationMenu,
-    NavigationMenuLink,
+    NavigationMenuIndicator,
     NavigationMenuList,
-    navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 import NextLink from 'next/link';
 import {GithubMenuDropdown} from "@/components/navbar-dropdowns";
+import {clsx} from "clsx";
+import {usePathname} from "next/navigation";
+import {Button} from "@/components/ui/button";
 
 const NAV_ITEMS = [
     {
         name: 'Github',
-        component: (props: { minWidthClass?: string }) => <GithubMenuDropdown minWidthClass={props.minWidthClass}
-        items={[
-            {name: 'Daily hits', href: '/hits'},
-        ]}/>},
+        component: (props: { minWidthClass?: string }) =>
+            <GithubMenuDropdown minWidthClass={props.minWidthClass}
+                                items={[
+                                    {name: 'Daily hits', href: '/github/hits'},
+                                ]}/>
+    },
     {name: 'Portfolio', href: '/portfolio'},
     //{name: 'Projects', href: '/projects'},
     //{name: 'Admin', href: '/admin'},
@@ -39,25 +44,32 @@ interface NavbarItemLinkProps {
     minWidthClass?: string;
 }
 
-const NavbarItemLink: React.FC<NavbarItemLinkProps> = ({href, children, minWidthClass}) => (
-    <NavbarItem>
-        <NextLink href={href} legacyBehavior passHref>
-            <NavigationMenuLink className={`${navigationMenuTriggerStyle()} ${minWidthClass}`}>
-                {children}
-            </NavigationMenuLink>
-        </NextLink>
-    </NavbarItem>
-);
+const NavbarItemLink: React.FC<NavbarItemLinkProps> = ({href, children, minWidthClass}) => {
+    const pathname = usePathname();
+
+    return (
+        <NavbarItem>
+            <Button asChild variant={pathname === href ? "default" : "ghost"} className={clsx(minWidthClass)}>
+                <NextLink href={href} scroll={false}>
+                    {children}
+                </NextLink>
+            </Button>
+        </NavbarItem>
+    );
+};
 
 interface MenuItemsProps {
     classname?: string;
     minWidthClass?: string;
 }
 
-const NavbarItemComponent: React.FC<{ component: React.ElementType, minWidthClass?: string }> = ({
-                                                                                                     component: Component,
-                                                                                                     minWidthClass
-                                                                                                 }) => (
+const NavbarItemComponent: React.FC<{
+    component: React.ElementType,
+    minWidthClass?: string
+}> = ({
+          component: Component,
+          minWidthClass
+      }) => (
     <NavbarItem>
         <Component minWidthClass={minWidthClass}/>
     </NavbarItem>
@@ -74,6 +86,7 @@ const MenuItems: React.FC<MenuItemsProps> = ({classname, minWidthClass}) => (
                                           minWidthClass={minWidthClass}>{item.name}</NavbarItemLink>
                 )}
             </div>
+            <NavigationMenuIndicator/>
         </NavigationMenuList>
     </NavigationMenu>
 );
