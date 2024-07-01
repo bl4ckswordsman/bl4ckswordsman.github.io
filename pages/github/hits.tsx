@@ -7,6 +7,7 @@ import {Button} from "@/components/ui/button";
 import {
     ResizableHandle, ResizablePanel, ResizablePanelGroup,
 } from "@/components/ui/resizable"
+import CustomBreadcrumb from "@/components/breadcrumbs";
 
 const repos = [
     'bl4ckswordsman/CerberusTiles',
@@ -71,6 +72,7 @@ export default function Hits() {
     return (
         <RootLayout titleKey={"hits"}>
             <FadeIn>
+                <CustomBreadcrumb/>
                 <HitsPage/>
             </FadeIn>
         </RootLayout>
