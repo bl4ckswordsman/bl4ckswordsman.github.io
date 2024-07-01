@@ -6,6 +6,7 @@ import {FadeIn} from "@/components/fade-in";
 import {LoadingSkeleton} from "@/components/loading-skeleton";
 import {Toaster} from "@/components/ui/sonner"
 import {PortfolioCard, AccordionSection, LanguagesSection, ContactSection} from "@/components/portfolio-comp";
+import CustomBreadcrumb from "@/components/breadcrumbs";
 /*import firebase from "firebase/analytics";*/
 
 const PortfolioPage = () => {
@@ -30,7 +31,7 @@ const PortfolioPage = () => {
 
     return (
         <FadeIn>
-            <div className="p-6">
+            <div className="m-4">
                 <Card className="p-3">
                     <PortfolioCard title="Skills" data={portfolio.skills} renderContent={data => (
                         <AccordionSection data={data}/>
@@ -60,6 +61,7 @@ const PortfolioPage = () => {
 export default function Portfolio() {
     return (
         <RootLayout titleKey={"portfolio"}>
+            <CustomBreadcrumb/>
             <PortfolioPage/>
             <Toaster/>
         </RootLayout>
