@@ -32,6 +32,7 @@ export const NAV_ITEMS = [
                                 ]}/>
     },
     {name: 'Portfolio', href: '/portfolio'},
+    {name: 'AI Chat', href: '/ai-chat'},
     //{name: 'Projects', href: '/projects'},
     //{name: 'Admin', href: '/admin'},
     //{name: 'Guest Book', href: '/guestbook'},

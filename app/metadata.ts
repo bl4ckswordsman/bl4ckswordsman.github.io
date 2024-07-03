@@ -6,6 +6,7 @@ export const metadata = {
         home: firstBase,
         portfolio: firstBase + " | Portfolio",
         github: firstBase + " | GitHub",
+        aichat: firstBase + " | AI Chat Playground",
         hits: firstBase + " | Daily GitHub Hits",
         repos: firstBase + " | GitHub Repositories",
         // Other page titles to be added here
