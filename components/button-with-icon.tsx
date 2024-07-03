@@ -3,15 +3,17 @@ import {Button} from "@/components/ui/button";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
 
 type ButtonVariant = "link" | "default" | "destructive" | "outline" | "secondary" | "ghost" | null | undefined;
+
 interface ButtonWithIconProps {
     variant: ButtonVariant;
     onClick: () => void;
     Icon: ReactNode;
     buttonText: string;
     tooltipText: string;
+    children?: ReactNode;
 }
 
-export function ButtonWithIcon({variant, onClick, Icon, buttonText, tooltipText}: ButtonWithIconProps) {
+export function ButtonWithIcon({variant, onClick, Icon, buttonText, tooltipText, children}: ButtonWithIconProps) {
     return (
         <TooltipProvider>
             <Tooltip>
@@ -19,6 +21,7 @@ export function ButtonWithIcon({variant, onClick, Icon, buttonText, tooltipText}
                     <Button variant={variant} onClick={onClick}>
                         {Icon}
                         {buttonText}
+                        {children}
                     </Button>
                 </TooltipTrigger>
                 <TooltipContent>
