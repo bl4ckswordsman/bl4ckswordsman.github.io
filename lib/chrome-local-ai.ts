@@ -1,22 +1,21 @@
-import { useState, useRef, useEffect } from 'react';
+import {useCallback, useRef, useState} from 'react';
 
 export const useChatLogic = () => {
     const [messages, setMessages] = useState<{ text: string; sender: 'user' | 'ai' }[]>([]);
     const [loading, setLoading] = useState(false);
     const [input, setInput] = useState('');
-    const [chatAvailable, setChatAvailable] = useState<boolean>(true); // Initialize with true
+    const [chatAvailable, setChatAvailable] = useState<boolean>(true);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    };
+    // Scroll to bottom of chat window
+    const scrollToBottom = useCallback(() => {
+        messagesEndRef.current?.scrollIntoView({behavior: 'smooth'});
+    }, []);
 
-    useEffect(() => {
-        scrollToBottom();
-    }, [messages]);
-
+    // Append message without useEffect
     const appendMessage = (text: string, sender: 'user' | 'ai') => {
-        setMessages(prev => [...prev, { text, sender }]);
+        setMessages(prev => [...prev, {text, sender}]);
+        scrollToBottom(); // Scroll immediately after state update
     };
 
     const updateLastMessage = (text: string) => {
@@ -28,6 +27,7 @@ export const useChatLogic = () => {
             }
             return updatedMessages;
         });
+        scrollToBottom();
     };
 
     const handleSend = async () => {
