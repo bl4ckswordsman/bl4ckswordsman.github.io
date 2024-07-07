@@ -3,22 +3,32 @@ import {Button} from "@/components/ui/button";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
 
 type ButtonVariant = "link" | "default" | "destructive" | "outline" | "secondary" | "ghost" | null | undefined;
+type ButtonSize = "default" | "sm" | "lg" | "icon" | null | undefined;
 
 interface ButtonWithIconProps {
-    variant: ButtonVariant;
+    variant?: ButtonVariant;
+    size?: ButtonSize;
     onClick: () => void;
     Icon: ReactNode;
-    buttonText: string;
-    tooltipText: string;
+    buttonText?: string;
+    tooltipText?: string;
     children?: ReactNode;
 }
 
-export function ButtonWithIcon({variant, onClick, Icon, buttonText, tooltipText, children}: ButtonWithIconProps) {
+export function ButtonWithIcon({
+                                   variant = "default",
+                                   size = "default",
+                                   onClick,
+                                   Icon,
+                                   buttonText = "",
+                                   tooltipText = "",
+                                   children
+                               }: ButtonWithIconProps) {
     return (
         <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger asChild>
-                    <Button variant={variant} onClick={onClick}>
+                    <Button size={size} variant={variant} onClick={onClick}>
                         {Icon}
                         {buttonText}
                         {children}
