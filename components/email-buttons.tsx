@@ -1,7 +1,5 @@
 import {ClipboardIcon, EnvelopeOpenIcon} from "@radix-ui/react-icons";
-import {Button} from "@/components/ui/button";
 import copy from 'copy-to-clipboard';
-import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
 import React from "react";
 import {ButtonWithIcon} from "@/components/button-with-icon";
 
