@@ -46,7 +46,7 @@
     "react-resizable-panels": "^2.0.19",
     "react-router-dom": "^6.23.1",
     "sonner": "^1.5.0",
-    "tailwind-merge": "^2.3.0",
+    "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
     "workbox-background-sync": "^7.1.0"
   },
