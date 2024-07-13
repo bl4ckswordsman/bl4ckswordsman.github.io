@@ -1,3 +1,5 @@
+/*https://magicui.design/docs/components/border-beam*/
+
 import {cn} from "@/lib/utils";
 import React from "react";
 
