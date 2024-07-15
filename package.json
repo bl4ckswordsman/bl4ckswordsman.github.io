@@ -10,7 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@jridgewell/sourcemap-codec": "^1.4.15",
+    "@jridgewell/sourcemap-codec": "^1.5.0",
     "@nextui-org/react": "^2.4.2",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-avatar": "^1.1.0",
