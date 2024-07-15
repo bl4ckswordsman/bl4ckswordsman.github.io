@@ -24,7 +24,8 @@ export function ButtonWithIcon({
                                    tooltipText = "",
                                    children
                                }: ButtonWithIconProps) {
-    return (
+    const shouldShowTooltip = tooltipText && tooltipText.trim().length > 0;
+    return shouldShowTooltip ? (
         <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger asChild>
@@ -39,5 +40,11 @@ export function ButtonWithIcon({
                 </TooltipContent>
             </Tooltip>
         </TooltipProvider>
+    ) : (
+        <Button size={size} variant={variant} onClick={onClick}>
+            {Icon}
+            {buttonText}
+            {children}
+        </Button>
     );
 }
