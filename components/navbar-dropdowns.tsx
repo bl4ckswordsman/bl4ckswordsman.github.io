@@ -26,7 +26,8 @@ export const GithubMenuDropdown: React.FC<GithubMenuDropdownProps> = ({items, mi
     return (
         <NavigationMenu>
             <NavigationMenuItem>
-                <NavigationMenuTrigger className={`${minWidthClass} bg-transparent`}>
+                <NavigationMenuTrigger
+                    className={`${minWidthClass} bg-transparent`}> {/*${buttonVariants({variant: "ghost"})}*/}
                     <p className="text-inherit">Github</p>
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
