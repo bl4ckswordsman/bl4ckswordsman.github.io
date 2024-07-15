@@ -35,7 +35,7 @@
     "firebase-admin": "^12.1.1",
     "framer-motion": "^11.2.13",
     "lucide-react": "^0.395.0",
-    "next": "14.2.4",
+    "next": "14.2.5",
     "next-themes": "^0.3.0",
     "particles.js": "^2.0.0",
     "react": "^18",
