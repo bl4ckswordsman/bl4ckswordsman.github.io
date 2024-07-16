@@ -68,8 +68,29 @@ export const useChatLogic = () => {
                 setChatAvailable(false); // Update state to indicate chat is not available
             }
         } catch (error) {
-            if (error instanceof Error) {
-                appendMessage(`Error: ${error.message}`, 'ai');
+            if (error instanceof DOMException) {
+                let errorMessage = 'An unknown error occurred.';
+                switch (error.name) {
+                    case 'InvalidStateError':
+                        errorMessage = 'The model execution session has been destroyed. Please create a new session.';
+                        break;
+                    case 'OperationError':
+                        errorMessage = 'Model execution service is not available. Please try again, possibly after relaunching Chrome.';
+                        break;
+                    case 'NotSupportedError':
+                        errorMessage = 'The request was invalid. Please ensure that both topK and temperature parameters are specified when calling createTextSession.';
+                        break;
+                    case 'UnknownError':
+                        errorMessage = `An unknown error occurred: ${error.message}. Please retry, possibly after relaunching Chrome.`;
+                        break;
+                    case 'NotReadableError':
+                        errorMessage = 'The response was disabled.';
+                        break;
+                    case 'AbortError':
+                        errorMessage = 'The request was canceled.';
+                        break;
+                }
+                appendMessage(errorMessage, 'ai');
             } else {
                 appendMessage('An unknown error occurred.', 'ai');
             }
