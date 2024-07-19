@@ -5,7 +5,7 @@ import {Input} from '@/components/ui/input';
 import RootLayout from "@/app/layout";
 import {FadeIn} from "@/components/fade-in";
 import CustomBreadcrumb from "@/components/breadcrumbs";
-import {useChatLogic} from '@/lib/chrome-local-ai';
+import {useChatLogic} from '@/lib/ai-chat-logic';
 import {Badge} from "@nextui-org/badge";
 import {IoIosClose} from "react-icons/io";
 import {IoIosCheckmark} from "react-icons/io";
