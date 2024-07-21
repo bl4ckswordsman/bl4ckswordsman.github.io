@@ -10,10 +10,12 @@ import {Badge} from "@nextui-org/badge";
 import {IoIosClose} from "react-icons/io";
 import {IoIosCheckmark} from "react-icons/io";
 import {Button as NextUIButton} from "@nextui-org/button";
-
 import {HiSparkles} from "react-icons/hi2";
 import BrowserInfoPopover from "@/components/browser-info-popover";
 import {checkCanCreateTextSession} from "@/utils/ai-chat-browser-compat";
+import {GearIcon, EraserIcon} from "@radix-ui/react-icons";
+import {Popover, PopoverContent, PopoverTrigger} from "@nextui-org/react";
+import {ButtonWithIcon} from "@/components/button-with-icon";
 
 const ChatPage: React.FC = () => {
     const {
@@ -24,6 +26,7 @@ const ChatPage: React.FC = () => {
         handleSend,
         messagesEndRef,
         chatAvailable,
+        clearMessages,
     } = useChatLogic();
 
     const [aiReady, setAiReady] = useState<boolean | null>(null);
@@ -44,21 +47,38 @@ const ChatPage: React.FC = () => {
                 <CardHeader className="p-4 border-b">
                     <div className="flex items-center justify-between">
                         <h3 className="text-lg font-semibold">AI Chat Playground</h3>
-                        <Badge
-                            isOneChar
-                            content={badgeContent}
-                            color={buttonColor}
-                            placement="bottom-left"
-                        >
-                            <BrowserInfoPopover>
-                                {/*<Tooltip content={chatAvailable ? "Ready." : "Not ready."}>*/}
-                                <NextUIButton isIconOnly radius={"full"} variant={"ghost"}
-                                              color={buttonColor}>
-                                    <HiSparkles/>
-                                </NextUIButton>
-                                {/*</Tooltip>*/}
-                            </BrowserInfoPopover>
-                        </Badge>
+                        <div className="space-x-4">
+                            <Popover className="max-w-2xl" backdrop="blur" showArrow>
+                                <PopoverTrigger>
+                                    <NextUIButton isIconOnly startContent={<GearIcon/>} radius={"full"}
+                                                  variant={"faded"}></NextUIButton>
+                                </PopoverTrigger>
+                                <PopoverContent>
+                                    <div>
+                                        <div className="m-2">
+                                            <ButtonWithIcon onClick={clearMessages}
+                                                            Icon={<EraserIcon className="h-4 w-4 mr-2"/>}
+                                                            variant={"secondary"} buttonText={"Clear Messages"}/>
+                                        </div>
+                                    </div>
+                                </PopoverContent>
+                            </Popover>
+                            <Badge
+                                isOneChar
+                                content={badgeContent}
+                                color={buttonColor}
+                                placement="bottom-left"
+                            >
+                                <BrowserInfoPopover>
+                                    {/*<Tooltip content={chatAvailable ? "Ready." : "Not ready."}>*/}
+                                    <NextUIButton isIconOnly radius={"full"} variant={"ghost"}
+                                                  color={buttonColor}>
+                                        <HiSparkles/>
+                                    </NextUIButton>
+                                    {/*</Tooltip>*/}
+                                </BrowserInfoPopover>
+                            </Badge>
+                        </div>
                     </div>
                 </CardHeader>
                 <CardContent className="p-4 space-y-4 overflow-y-auto h-80">

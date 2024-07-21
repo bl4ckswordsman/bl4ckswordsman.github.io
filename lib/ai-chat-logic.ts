@@ -1,5 +1,5 @@
-import { useState, useRef, useCallback } from 'react';
-import { AIMessage, checkAIAvailability, createAISession, handleAIError } from '@/lib/chrome-local-ai';
+import {useState, useRef, useCallback, useEffect} from 'react';
+import {AIMessage, checkAIAvailability, createAISession, handleAIError} from '@/lib/chrome-local-ai';
 
 export const useChatLogic = () => {
     const [messages, setMessages] = useState<AIMessage[]>([]);
@@ -8,12 +8,40 @@ export const useChatLogic = () => {
     const [chatAvailable, setChatAvailable] = useState<boolean>(true);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
+    // Load messages from localStorage when the component mounts
+    useEffect(() => {
+        const savedMessages = localStorage.getItem('messages');
+        if (savedMessages) {
+            try {
+                const parsedMessages = JSON.parse(savedMessages);
+                setMessages(parsedMessages);
+                console.log('Messages loaded from localStorage:', parsedMessages);
+            } catch (error) {
+                console.error('Failed to parse messages from localStorage:', error);
+            }
+        } else {
+            console.log('No messages found in localStorage.');
+        }
+    }, []);
+
+    // Save messages to localStorage whenever they change
+    useEffect(() => {
+        if (messages.length > 0) {
+            try {
+                localStorage.setItem('messages', JSON.stringify(messages));
+                console.log('Messages saved to localStorage:', messages);
+            } catch (error) {
+                console.error('Failed to save messages to localStorage:', error);
+            }
+        }
+    }, [messages]);
+
     const scrollToBottom = useCallback(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        messagesEndRef.current?.scrollIntoView({behavior: 'smooth'});
     }, []);
 
     const appendMessage = (text: string, sender: 'user' | 'ai') => {
-        setMessages(prev => [...prev, { text, sender }]);
+        setMessages(prev => [...prev, {text, sender}]);
         scrollToBottom();
     };
 
@@ -65,6 +93,13 @@ export const useChatLogic = () => {
         }
     };
 
+    // Function to clear messages from state and localStorage
+    const clearMessages = () => {
+        setMessages([]);
+        localStorage.removeItem('messages');
+        console.log('Messages cleared from localStorage.');
+    };
+
     return {
         messages,
         input,
@@ -73,5 +108,6 @@ export const useChatLogic = () => {
         handleSend,
         messagesEndRef,
         chatAvailable,
+        clearMessages,
     };
 };
