@@ -1,12 +1,11 @@
-import {useState, useRef, useCallback, useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import {AIMessage, checkAIAvailability, createAISession, handleAIError} from '@/lib/chrome-local-ai';
 
-export const useChatLogic = () => {
+export const useChatLogic = (scrollToBottom: () => void) => {
     const [messages, setMessages] = useState<AIMessage[]>([]);
     const [loading, setLoading] = useState(false);
     const [input, setInput] = useState('');
     const [chatAvailable, setChatAvailable] = useState<boolean>(true);
-    const messagesEndRef = useRef<HTMLDivElement>(null);
 
     // Load messages from localStorage when the component mounts
     useEffect(() => {
@@ -36,13 +35,9 @@ export const useChatLogic = () => {
         }
     }, [messages]);
 
-    const scrollToBottom = useCallback(() => {
-        messagesEndRef.current?.scrollIntoView({behavior: 'smooth'});
-    }, []);
-
     const appendMessage = (text: string, sender: 'user' | 'ai') => {
         setMessages(prev => [...prev, {text, sender}]);
-        scrollToBottom();
+        scrollToBottom(); // Use scrollToBottom from useScrollAnchor hook
     };
 
     const updateLastMessage = (text: string) => {
@@ -54,7 +49,7 @@ export const useChatLogic = () => {
             }
             return updatedMessages;
         });
-        scrollToBottom();
+        scrollToBottom(); // Use scrollToBottom from useScrollAnchor hook
     };
 
     const handleSend = async () => {
@@ -106,7 +101,6 @@ export const useChatLogic = () => {
         loading,
         setInput,
         handleSend,
-        messagesEndRef,
         chatAvailable,
         clearMessages,
     };

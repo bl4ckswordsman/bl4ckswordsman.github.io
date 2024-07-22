@@ -17,19 +17,21 @@ import {GearIcon, EraserIcon} from "@radix-ui/react-icons";
 import {Popover, PopoverContent, PopoverTrigger} from "@nextui-org/react";
 import {ButtonWithIcon} from "@/components/button-with-icon";
 import MarkdownWithMath from "@/components/markdown-with-math";
+import {useScrollAnchor} from '@/lib/hooks/use-scroll-anchor';
 
 
 const ChatPage: React.FC = () => {
+    const {containerRef, messagesRef, scrollToBottom} = useScrollAnchor();
+
     const {
         messages,
         input,
         loading,
         setInput,
         handleSend,
-        messagesEndRef,
         chatAvailable,
         clearMessages,
-    } = useChatLogic();
+    } = useChatLogic(scrollToBottom);
 
     const [aiReady, setAiReady] = useState<boolean | null>(null);
 
@@ -39,6 +41,10 @@ const ChatPage: React.FC = () => {
             setAiReady(result.isReadily);
         })();
     }, []);
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages, scrollToBottom]);
 
     const buttonColor = aiReady ? "success" : "danger";
     const badgeContent = aiReady ? <IoIosCheckmark/> : <IoIosClose/>;
@@ -83,9 +89,10 @@ const ChatPage: React.FC = () => {
                         </div>
                     </div>
                 </CardHeader>
-                <CardContent className="p-4 space-y-4 overflow-y-auto h-80">
+                <CardContent ref={containerRef} className="p-4 space-y-4 overflow-y-auto h-80">
                     {messages.map((msg, index) => (
                         <div
+                            ref={index === messages.length - 1 ? messagesRef : null}
                             key={index}
                             className={`flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm ${
                                 msg.sender === 'user' ? 'ml-auto bg-blue-500 text-white' : 'bg-gray-200 text-black'
@@ -94,7 +101,7 @@ const ChatPage: React.FC = () => {
                             <MarkdownWithMath text={msg.text}/>
                         </div>
                     ))}
-                    <div ref={messagesEndRef}/>
+                    <div/>
                 </CardContent>
                 <CardFooter className="p-4 border-t">
                     <form
