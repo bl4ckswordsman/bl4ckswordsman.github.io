@@ -4,7 +4,7 @@ import "@/app/globals.css";
 import {ThemeProvider} from "@/components/theme-provider"
 import {cn} from "@/lib/utils";
 import React from "react";
-import {Helmet} from "react-helmet";
+import Head from "next/head";
 import {SpeedInsights} from "@vercel/speed-insights/next";
 import {Analytics} from "@vercel/analytics/react";
 import {NaviMenu} from "@/components/navigation-menu-header";
@@ -26,14 +26,14 @@ export default function RootLayout(props: RootLayoutProps) {
             defaultTheme="system"
             enableSystem
         >
-            <Helmet>
+            <Head>
                 <title>{getFullTitle(props.titleKey)}</title>
                 <meta name="description" content={metadata.generalDescription || 'Welcome to my homepage'}/>
                 <meta name="og:title" content={getFullTitle(props.titleKey)}/>
                 <meta name="og:description" content={getDescription(props.titleKey)}/>
                 <meta name="og:image" content={`${domainBase}/api/og?titleKey=${props.titleKey}`}/>
                 <style>{`body { font-family: ${fontSans}; }`}</style>
-            </Helmet>
+            </Head>
             <NaviMenu/>
             <div className={cn('root-layout')}>
                 <div className="max-w-screen-lg mx-auto"> {/* Match the max width of the navbar */}
