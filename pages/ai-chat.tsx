@@ -16,6 +16,8 @@ import {checkCanCreateTextSession} from "@/utils/ai-chat-browser-compat";
 import {GearIcon, EraserIcon} from "@radix-ui/react-icons";
 import {Popover, PopoverContent, PopoverTrigger} from "@nextui-org/react";
 import {ButtonWithIcon} from "@/components/button-with-icon";
+import MarkdownWithMath from "@/components/markdown-with-math";
+
 
 const ChatPage: React.FC = () => {
     const {
@@ -89,7 +91,7 @@ const ChatPage: React.FC = () => {
                                 msg.sender === 'user' ? 'ml-auto bg-blue-500 text-white' : 'bg-gray-200 text-black'
                             }`}
                         >
-                            {msg.text}
+                            <MarkdownWithMath text={msg.text}/>
                         </div>
                     ))}
                     <div ref={messagesEndRef}/>
