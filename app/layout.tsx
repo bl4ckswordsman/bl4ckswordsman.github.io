@@ -1,4 +1,4 @@
-import {metadata} from "@/app/metadata";
+import {metadata, domainBase, getFullTitle, getDescription, getTitle} from "@/app/metadata";
 import {Inter as FontSans} from "next/font/google"
 import "@/app/globals.css";
 import {ThemeProvider} from "@/components/theme-provider"
@@ -27,8 +27,11 @@ export default function RootLayout(props: RootLayoutProps) {
             enableSystem
         >
             <Helmet>
-                <title>{metadata.titles[props.titleKey]}</title>
-                <meta name="description" content={metadata.description || 'Welcome to my homepage'}/>
+                <title>{getFullTitle(props.titleKey)}</title>
+                <meta name="description" content={metadata.generalDescription || 'Welcome to my homepage'}/>
+                <meta name="og:title" content={getFullTitle(props.titleKey)}/>
+                <meta name="og:description" content={getDescription(props.titleKey)}/>
+                <meta name="og:image" content={`${domainBase}/api/og?titleKey=${props.titleKey}`}/>
                 <style>{`body { font-family: ${fontSans}; }`}</style>
             </Helmet>
             <NaviMenu/>

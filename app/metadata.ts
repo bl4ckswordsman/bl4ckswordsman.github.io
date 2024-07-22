@@ -1,16 +1,41 @@
-const firstBase = "bl4ckswordsman";
+export const firstBase = "bl4ckswordsman";
 const secondBase = "amarildo";
+export const domainBase = "https://bl4ckswordsman.vercel.app";
 
 export const metadata = {
     titles: {
-        home: firstBase,
-        portfolio: firstBase + " | Portfolio",
-        github: firstBase + " | GitHub",
-        aichat: firstBase + " | AI Chat Playground",
-        hits: firstBase + " | Daily GitHub Hits",
-        repos: firstBase + " | GitHub Repositories",
+        home: '',
+        portfolio: "Portfolio",
+        github: "GitHub",
+        aichat: "AI Chat Playground",
+        hits: "Daily GitHub Hits",
+        repos: "GitHub Repositories",
         // Other page titles to be added here
     },
-    description: `🚀 Explore the digital realm with ${firstBase} (aka ${secondBase})!
+    descriptions: {
+        home: `Welcome to ${firstBase} (aka ${secondBase})'s homepage!`,
+        portfolio: `Discover ${firstBase}'s portfolio. A showcase of projects and skills.`,
+        github: `Explore ${firstBase}'s GitHub related content.`,
+        aichat: `Interact with the experimental Chrome built-in AI. Experience fast&local AI in action.`,
+        hits: `View ${firstBase}'s daily GitHub hits/visits.`,
+        repos: `Browse through ${firstBase}'s GitHub repositories.`,
+        // Other page descriptions to be added here
+    },
+    generalDescription: `🚀 Explore the digital realm with ${firstBase} (aka ${secondBase})!
      Coding magic ✨, tech treasures 🖥️, and much more! (≧◡≦)`,
 };
+
+export type MetadataKeys = keyof typeof metadata.titles;
+
+export function getTitle(pageKey: MetadataKeys): string {
+    return metadata.titles[pageKey] || firstBase;
+}
+
+export function getFullTitle(pageKey: MetadataKeys): string {
+    const pageTitle = metadata.titles[pageKey];
+    return pageTitle ? `${firstBase} | ${pageTitle}` : firstBase;
+}
+
+export function getDescription(pageKey: MetadataKeys): string {
+    return metadata.descriptions[pageKey] || "";
+}
