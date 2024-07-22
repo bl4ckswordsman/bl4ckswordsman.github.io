@@ -1,4 +1,4 @@
-import {metadata, domainBase, getFullTitle, getDescription, getTitle} from "@/app/metadata";
+import {metadata, domainBase, getFullTitle, getDescription} from "@/app/metadata";
 import {Inter as FontSans} from "next/font/google"
 import "@/app/globals.css";
 import {ThemeProvider} from "@/components/theme-provider"
