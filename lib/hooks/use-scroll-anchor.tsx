@@ -1,7 +1,8 @@
+/*Source: https://github.com/nicoalbanese/ai-sdk-chrome-ai/blob/main/lib/hooks/use-scroll-anchor.tsx*/
+
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useEventListener } from "usehooks-ts";
 
-/*Source: https://github.com/nicoalbanese/ai-sdk-chrome-ai/blob/main/lib/hooks/use-scroll-anchor.tsx*/
 
 export const useScrollAnchor = () => {
     const containerRef = useRef<HTMLDivElement>(null);
