@@ -11,7 +11,7 @@ const GithubPage: React.FC<GithubMenuDropdownProps> = ({ items }) => {
         <div className="m-4">
             {items.map((item: DropdownItem, index: number) => (
                 <div key={index} className="m-2">
-                    <Button variant="secondary">
+                    <Button size="lg" variant="secondary">
                         <NextLink href={item.href} scroll={false}>
                             {item.name}
                         </NextLink>
