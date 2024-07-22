@@ -1,6 +1,6 @@
 export const firstBase = "bl4ckswordsman";
 const secondBase = "amarildo";
-export const domainBase = "https://bl4ckswordsman.vercel.app";
+export const domainBase = "https://blackswordsman.vercel.app";
 
 export const metadata = {
     titles: {
