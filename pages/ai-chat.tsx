@@ -1,23 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {Card, CardContent, CardFooter, CardHeader} from '@/components/ui/card';
-import {Button} from '@/components/ui/button';
-import {Input} from '@/components/ui/input';
+import {Card} from '@/components/ui/card';
 import RootLayout from "@/app/layout";
 import {FadeIn} from "@/components/fade-in";
 import CustomBreadcrumb from "@/components/breadcrumbs";
 import {useChatLogic} from '@/lib/ai-chat-logic';
-import {Badge} from "@nextui-org/badge";
-import {IoIosClose} from "react-icons/io";
-import {IoIosCheckmark} from "react-icons/io";
-import {Button as NextUIButton} from "@nextui-org/button";
-import {HiSparkles} from "react-icons/hi2";
-import BrowserInfoPopover from "@/components/browser-info-popover";
 import {checkCanCreateTextSession} from "@/utils/ai-chat-browser-compat";
-import {GearIcon, EraserIcon} from "@radix-ui/react-icons";
-import {Popover, PopoverContent, PopoverTrigger} from "@nextui-org/react";
-import {ButtonWithIcon} from "@/components/button-with-icon";
-import MarkdownWithMath from "@/components/markdown-with-math";
 import {useScrollAnchor} from '@/lib/hooks/use-scroll-anchor';
+import {Tabs, TabsList, TabsTrigger, TabsContent} from '@/components/ui/tabs';
+import RealtimeChatContent from "@/components/chat-realtime-content";
+import ChatCardHeader from "@/components/chat-card-header";
+import {useRealtimeChatLogic} from "@/lib/realtime-ai-chat";
+import ChatContent from "@/components/chat-content";
 
 
 const ChatPage: React.FC = () => {
@@ -33,6 +26,12 @@ const ChatPage: React.FC = () => {
         clearMessages,
     } = useChatLogic(scrollToBottom);
 
+    const {
+        input: inputRealtime,
+        aiResponse: aiResponseRealtime,
+        setInput: setInputRealtime,
+    } = useRealtimeChatLogic();
+
     const [aiReady, setAiReady] = useState<boolean | null>(null);
 
     useEffect(() => {
@@ -45,87 +44,33 @@ const ChatPage: React.FC = () => {
     useEffect(() => {
         scrollToBottom();
     }, [messages, scrollToBottom]);
-
-    const buttonColor = aiReady ? "success" : "danger";
-    const badgeContent = aiReady ? <IoIosCheckmark/> : <IoIosClose/>;
-
     return (
         <div className="m-4">
-            <Card className="m-4 max-w-md mx-auto">
-                <CardHeader className="p-4 border-b">
-                    <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-semibold">AI Chat Playground</h3>
-                        <div className="space-x-4">
-                            <Popover className="max-w-2xl" backdrop="blur" showArrow>
-                                <PopoverTrigger>
-                                    <NextUIButton isIconOnly startContent={<GearIcon/>} radius={"full"}
-                                                  variant={"faded"}></NextUIButton>
-                                </PopoverTrigger>
-                                <PopoverContent>
-                                    <div>
-                                        <div className="m-2">
-                                            <ButtonWithIcon onClick={clearMessages}
-                                                            Icon={<EraserIcon className="h-4 w-4 mr-2"/>}
-                                                            variant={"secondary"} buttonText={"Clear Messages"}/>
-                                        </div>
-                                    </div>
-                                </PopoverContent>
-                            </Popover>
-                            <Badge
-                                isOneChar
-                                content={badgeContent}
-                                color={buttonColor}
-                                placement="bottom-left"
-                            >
-                                <BrowserInfoPopover>
-                                    {/*<Tooltip content={chatAvailable ? "Ready." : "Not ready."}>*/}
-                                    <NextUIButton isIconOnly radius={"full"} variant={"ghost"}
-                                                  color={buttonColor}>
-                                        <HiSparkles/>
-                                    </NextUIButton>
-                                    {/*</Tooltip>*/}
-                                </BrowserInfoPopover>
-                            </Badge>
-                        </div>
-                    </div>
-                </CardHeader>
-                <CardContent ref={containerRef} className="p-4 space-y-4 overflow-y-auto h-80">
-                    {messages.map((msg, index) => (
-                        <div
-                            ref={index === messages.length - 1 ? messagesRef : null}
-                            key={index}
-                            className={`flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm ${
-                                msg.sender === 'user' ? 'ml-auto bg-blue-500 text-white' : 'bg-gray-200 text-black'
-                            }`}
-                        >
-                            <MarkdownWithMath text={msg.text}/>
-                        </div>
-                    ))}
-                    <div/>
-                </CardContent>
-                <CardFooter className="p-4 border-t">
-                    <form
-                        onSubmit={async (event) => {
-                            event.preventDefault();
-                            if (!input.trim()) return;
-                            await handleSend();
-                        }}
-                        className="flex items-center space-x-2 w-full"
-                    >
-                        <Input
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            placeholder="Type your message here..."
-                            className="flex-1"
-                            autoComplete="off"
-                            disabled={!chatAvailable} // Disable input if chat is not available
+            <Tabs className="max-w-md mx-auto" defaultValue="chat">
+                <TabsList className="x-md">
+                    <TabsTrigger onClick={scrollToBottom} value="chat">Chat mode</TabsTrigger>
+                    <TabsTrigger value="realtime">Real-time mode</TabsTrigger>
+                </TabsList>
+                <TabsContent value="realtime">
+                    <Card>
+                        <ChatCardHeader headerText="Real-time AI Chat" aiReady={aiReady} clearMessages={clearMessages}/>
+                        <RealtimeChatContent
+                            input={inputRealtime}
+                            aiResponse={aiResponseRealtime}
+                            chatAvailable={chatAvailable}
+                            setInput={setInputRealtime}
                         />
-                        <Button type="submit" disabled={loading || !chatAvailable}>
-                            Send
-                        </Button>
-                    </form>
-                </CardFooter>
-            </Card>
+                    </Card>
+                </TabsContent>
+                <TabsContent value="chat">
+                    <Card>
+                        <ChatCardHeader headerText="AI Chat" aiReady={aiReady} clearMessages={clearMessages}/>
+                        <ChatContent messages={messages} input={input} loading={loading} chatAvailable={chatAvailable}
+                                     setInput={setInput} handleSend={handleSend}
+                                     containerRef={containerRef} messagesRef={messagesRef}/>
+                    </Card>
+                </TabsContent>
+            </Tabs>
         </div>
     );
 };
