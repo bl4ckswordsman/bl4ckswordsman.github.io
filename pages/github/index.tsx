@@ -1,12 +1,12 @@
 import React from 'react';
-import { DropdownItem, GithubMenuDropdownProps } from "@/components/navbar-dropdowns";
+import {DropdownItem, NavbarDropdownProps} from "@/components/navbar-dropdowns";
 import RootLayout from "@/app/layout";
-import { Button } from "@/components/ui/button";
+import {Button} from "@/components/ui/button";
 import NextLink from "next/link";
-import { NAV_ITEMS } from "@/components/navigation-menu-header";
+import {NAV_ITEMS} from "@/components/navigation-menu-header";
 import CustomBreadcrumb from "@/components/breadcrumbs";
 
-const GithubPage: React.FC<GithubMenuDropdownProps> = ({ items }) => {
+const GithubPage: React.FC<NavbarDropdownProps> = ({dropdownName = "Github", items}) => {
     return (
         <div className="m-4">
             {items.map((item: DropdownItem, index: number) => (
@@ -31,7 +31,7 @@ export default function Github() {
     return (
         <RootLayout titleKey={"github"}>
             <CustomBreadcrumb/>
-            <GithubPage items={items} />
+            <GithubPage items={items}/>
         </RootLayout>
     );
 }

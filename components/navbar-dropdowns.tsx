@@ -15,12 +15,13 @@ export interface DropdownItem {
     href: string;
 }
 
-export interface GithubMenuDropdownProps {
+export interface NavbarDropdownProps {
+    dropdownName?: string;
     items: DropdownItem[];
     minWidthClass?: string;
 }
 
-export const GithubMenuDropdown: React.FC<GithubMenuDropdownProps> = ({items, minWidthClass}) => {
+export const NavbarDropdown: React.FC<NavbarDropdownProps> = ({dropdownName, items, minWidthClass}) => {
     const pathname = usePathname();
 
     return (
@@ -28,7 +29,7 @@ export const GithubMenuDropdown: React.FC<GithubMenuDropdownProps> = ({items, mi
             <NavigationMenuItem>
                 <NavigationMenuTrigger
                     className={`${minWidthClass} bg-transparent`}> {/*${buttonVariants({variant: "ghost"})}*/}
-                    <p className="text-inherit">Github</p>
+                    <p className="text-inherit">{dropdownName}</p>
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
                     <ul className={`grid gap-3 p-3 content-center w-max lg:grid-cols-1 ${minWidthClass}`}>

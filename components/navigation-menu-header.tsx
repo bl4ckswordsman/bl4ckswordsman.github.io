@@ -17,7 +17,7 @@ import {
     NavigationMenuList,
 } from "@/components/ui/navigation-menu"
 import NextLink from 'next/link';
-import {GithubMenuDropdown} from "@/components/navbar-dropdowns";
+import {NavbarDropdown} from "@/components/navbar-dropdowns";
 import {clsx} from "clsx";
 import {usePathname} from "next/navigation";
 import {Button} from "@/components/ui/button";
@@ -26,10 +26,11 @@ export const NAV_ITEMS = [
     {
         name: 'Github',
         component: (props: { minWidthClass?: string }) =>
-            <GithubMenuDropdown minWidthClass={props.minWidthClass}
-                                items={[
-                                    {name: 'Daily hits', href: '/github/hits'},
-                                ]}/>
+            <NavbarDropdown minWidthClass={props.minWidthClass}
+                            dropdownName="Github"
+                            items={[
+                                {name: 'Daily hits', href: '/github/hits'},
+                            ]}/>
     },
     {name: 'Portfolio', href: '/portfolio'},
     {name: 'AI Chat', href: '/ai-chat'},
