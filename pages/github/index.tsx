@@ -6,7 +6,7 @@ import NextLink from "next/link";
 import {NAV_ITEMS} from "@/components/navigation-menu-header";
 import CustomBreadcrumb from "@/components/breadcrumbs";
 
-const GithubPage: React.FC<NavbarDropdownProps> = ({dropdownName = "Github", items}) => {
+const GithubPage: React.FC<NavbarDropdownProps> = ({items}) => {
     return (
         <div className="m-4">
             {items.map((item: DropdownItem, index: number) => (

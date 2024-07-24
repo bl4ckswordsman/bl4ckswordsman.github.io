@@ -23,6 +23,8 @@ import {usePathname} from "next/navigation";
 import {Button} from "@/components/ui/button";
 
 export const NAV_ITEMS = [
+    {name: 'Portfolio', href: '/portfolio'},
+    {name: 'AI Chat', href: '/ai-chat'},
     {
         name: 'Github',
         component: (props: { minWidthClass?: string }) =>
@@ -32,8 +34,6 @@ export const NAV_ITEMS = [
                                 {name: 'Daily hits', href: '/github/hits'},
                             ]}/>
     },
-    {name: 'Portfolio', href: '/portfolio'},
-    {name: 'AI Chat', href: '/ai-chat'},
     //{name: 'Projects', href: '/projects'},
     //{name: 'Admin', href: '/admin'},
     //{name: 'Guest Book', href: '/guestbook'},
