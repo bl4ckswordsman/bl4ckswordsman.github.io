@@ -47,7 +47,7 @@ const ChatPage: React.FC = () => {
     return (
         <div className="m-4">
             <Tabs className="max-w-md mx-auto" defaultValue="chat">
-                <TabsList className="x-md">
+                <TabsList className="x-md grid grid-cols-2 w-full">
                     <TabsTrigger onClick={scrollToBottom} value="chat">Chat mode</TabsTrigger>
                     <TabsTrigger value="realtime">Real-time mode</TabsTrigger>
                 </TabsList>
