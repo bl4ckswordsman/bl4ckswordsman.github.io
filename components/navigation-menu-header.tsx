@@ -34,9 +34,17 @@ export const NAV_ITEMS = [
                                 {name: 'Daily hits', href: '/github/hits'},
                             ]}/>
     },
+    {
+        name: 'More',
+        component: (props: { minWidthClass?: string }) =>
+            <NavbarDropdown minWidthClass={props.minWidthClass}
+                            dropdownName="More"
+                            items={[
+                                {name: 'Guestbook', href: '/more/guestbook'},
+                            ]}/>
+    },
     //{name: 'Projects', href: '/projects'},
     //{name: 'Admin', href: '/admin'},
-    //{name: 'Guest Book', href: '/guestbook'},
     // More items here...
 ];
 
