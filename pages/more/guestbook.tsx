@@ -10,18 +10,24 @@ import {Card, CardContent} from "@/components/ui/card"
 import RootLayout from "@/app/layout";
 import {sendMessage} from "@/lib/send-telegram-message";
 import React, {useState} from "react";
+import {Checkbox} from "@/components/ui/checkbox";
+import {Label} from "@/components/ui/label";
 
 const Guestbook = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState("");
+    const [isPublic, setIsPublic] = useState(true);
+    const [showNameEmail, setShowNameEmail] = useState(true);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        await sendMessage({name, email, message});
+        await sendMessage({name, email, message, isPublic, showNameEmail});
         setName("");
         setEmail("");
         setMessage("");
+        setIsPublic(true);
+        setShowNameEmail(true);
         // TODO: Optional UI feedback (e.g., showing a success message)
     };
 
@@ -66,7 +72,23 @@ const Guestbook = () => {
                                           onChange={(e) => setMessage(e.target.value)}/>
                             </div>
                         </div>
-                        <div className="flex justify-end">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-2">
+                                <Checkbox
+                                    id="is-public"
+                                    checked={isPublic}
+                                    onCheckedChange={(checked) => setIsPublic(checked as boolean)}
+                                />
+                                <Label htmlFor="is-public">Make message public</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <Checkbox
+                                    id="show-name-email"
+                                    checked={showNameEmail}
+                                    onCheckedChange={(checked) => setShowNameEmail(checked as boolean)}
+                                />
+                                <Label htmlFor="show-name-email">Make name and email public</Label>
+                            </div>
                             <Button type="submit">Submit</Button>
                         </div>
                     </form>

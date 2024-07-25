@@ -2,9 +2,11 @@ type SendMessageParams = {
     name: string;
     email: string;
     message: string;
+    isPublic: boolean;
+    showNameEmail: boolean;
 };
 
-export async function sendMessage({ name, email, message }: SendMessageParams): Promise<void> {
+export async function sendMessage({name, email, message, isPublic, showNameEmail}: SendMessageParams): Promise<void> {
     try {
         const browserInfo = {
             userAgent: navigator.userAgent,
@@ -14,12 +16,12 @@ export async function sendMessage({ name, email, message }: SendMessageParams): 
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
         };
 
-        const response = await fetch('/api/internal/send-telegram-message',{
+        const response = await fetch('/api/internal/send-telegram-message', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ name, email, message, browserInfo }),
+            body: JSON.stringify({name, email, message, isPublic, showNameEmail, browserInfo}),
         });
 
         if (response.ok) {

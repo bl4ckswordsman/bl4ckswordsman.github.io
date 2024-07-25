@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(405).json({message: 'Method not allowed'})
     }
 
-    const {name, email, message, browserInfo} = req.body
+    const {name, email, message, isPublic, showNameEmail, browserInfo} = req.body;
     const ipAddress = (Array.isArray(req.headers['x-forwarded-for']) ? req.headers['x-forwarded-for'][0] : req.headers['x-forwarded-for']) || req.socket.remoteAddress || 'Unknown IP';
     const botToken = process.env.TELEGRAM_BOT_TOKEN
     const chatId = process.env.TELEGRAM_CHAT_ID
@@ -21,8 +21,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     *Name*: ${escapeMarkdown(name)}
     *Email*: ${escapeMarkdown(email)}
     *Message*: ${escapeMarkdown(message)}
+    *Public Message*: ${isPublic ? 'Yes' : 'No'}
+    *Public Name&Email*: ${showNameEmail ? 'Yes' : 'No'}
     
-*Browser Info*:
+*Browser Info*
     • User Agent: ${escapeMarkdown(browserInfo.userAgent)}
     • Language: ${escapeMarkdown(browserInfo.language)}
     • Screen Size: ${escapeMarkdown(browserInfo.screenSize)}
