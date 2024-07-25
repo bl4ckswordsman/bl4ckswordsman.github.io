@@ -85,7 +85,6 @@ const GuestbookForm: React.FC<GuestbookFormProps> = ({onSuccess}) => {
                 <Button type="submit">Submit</Button>
             </div>
         </form>
-
     );
 };
 
