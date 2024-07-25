@@ -16,7 +16,7 @@ export async function sendMessage({name, email, message, isPublic, showNameEmail
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
         };
 
-        const response = await fetch('/api/internal/send-telegram-message', {
+        const response = await fetch('/api/internal/send-guestbook-entry', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
