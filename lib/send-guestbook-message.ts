@@ -4,9 +4,10 @@ type SendMessageParams = {
     message: string;
     isPublic: boolean;
     showNameEmail: boolean;
+    turnstileToken: string;
 };
 
-export async function sendMessage({name, email, message, isPublic, showNameEmail}: SendMessageParams): Promise<void> {
+export async function sendMessage({name, email, message, isPublic, showNameEmail, turnstileToken}: SendMessageParams): Promise<void> {
     try {
         const browserInfo = {
             userAgent: navigator.userAgent,
@@ -21,7 +22,7 @@ export async function sendMessage({name, email, message, isPublic, showNameEmail
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({name, email, message, isPublic, showNameEmail, browserInfo}),
+            body: JSON.stringify({name, email, message, isPublic, showNameEmail, turnstileToken, browserInfo}),
         });
 
         if (response.ok) {

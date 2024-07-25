@@ -1,9 +1,10 @@
+import React, {useState} from "react";
 import {Input} from "@/components/ui/input";
 import {Textarea} from "@/components/ui/textarea";
 import {Button} from "@/components/ui/button";
 import {Checkbox} from "@/components/ui/checkbox";
 import {Label} from "@/components/ui/label";
-import React, {useState} from "react";
+import Turnstile from "react-turnstile";
 import {sendMessage} from "@/lib/send-guestbook-message";
 
 interface GuestbookFormProps {
@@ -16,10 +17,15 @@ const GuestbookForm: React.FC<GuestbookFormProps> = ({onSuccess}) => {
     const [message, setMessage] = useState("");
     const [isPublic, setIsPublic] = useState(true);
     const [showNameEmail, setShowNameEmail] = useState(true);
+    const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        await sendMessage({name, email, message, isPublic, showNameEmail});
+        if (!turnstileToken) {
+            alert("Please complete the CAPTCHA challenge.");
+            return;
+        }
+        await sendMessage({name, email, message, isPublic, showNameEmail, turnstileToken});
         setName("");
         setEmail("");
         setMessage("");
@@ -70,6 +76,12 @@ const GuestbookForm: React.FC<GuestbookFormProps> = ({onSuccess}) => {
                               onCheckedChange={(checked) => setShowNameEmail(checked as boolean)}/>
                     <Label htmlFor="show-name-email">Make name and email public</Label>
                 </div>
+            </div>
+            <div className="flex flex-wrap items-center justify-between w-full">
+                <Turnstile
+                    sitekey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+                    onVerify={(token) => setTurnstileToken(token)}
+                />
                 <Button type="submit">Submit</Button>
             </div>
         </form>
