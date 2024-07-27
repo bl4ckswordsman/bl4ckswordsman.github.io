@@ -32,6 +32,9 @@ export default function RootLayout(props: RootLayoutProps) {
                 <meta name="og:title" content={getFullTitle(props.titleKey)}/>
                 <meta name="og:description" content={getDescription(props.titleKey)}/>
                 <meta name="og:image" content={`${domainBase}/api/og?titleKey=${props.titleKey}`}/>
+                <meta name="mobile-web-app-capable" content="yes"/>
+                <meta name="apple-mobile-web-app-capable" content="yes"/>
+                <meta name="theme-color" content="#143999"/>
                 <style>{`body { font-family: ${fontSans}; }`}</style>
             </Head>
             <NaviMenu/>
