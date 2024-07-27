@@ -1,4 +1,4 @@
-import {metadata, domainBase, getFullTitle, getDescription} from "@/app/metadata";
+import {metadata, domainBase, getFullTitle, getDescription, firstBase} from "@/app/metadata";
 import {Inter as FontSans} from "next/font/google"
 import "@/app/globals.css";
 import {ThemeProvider} from "@/components/theme-provider"
@@ -32,6 +32,8 @@ export default function RootLayout(props: RootLayoutProps) {
                 <meta name="og:title" content={getFullTitle(props.titleKey)}/>
                 <meta name="og:description" content={getDescription(props.titleKey)}/>
                 <meta name="og:image" content={`${domainBase}/api/og?titleKey=${props.titleKey}`}/>
+                {/* Allow the user to add the site to their home screen on mobile */}
+                <meta name="application-name" content={firstBase}/>
                 <meta name="mobile-web-app-capable" content="yes"/>
                 <meta name="apple-mobile-web-app-capable" content="yes"/>
                 <meta name="theme-color" content="#143999"/>
