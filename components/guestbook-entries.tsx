@@ -29,7 +29,7 @@ const GuestbookEntries: React.FC<GuestbookEntriesProps> = ({entries}) => {
             <h2 className="text-2xl font-bold">Messages</h2>
             <div className="space-y-4">
                 {entries.map((entry) => (
-                    <Card key={entry.id}>
+                    <Card key={entry.id} className="card-shadow">
                         <CardContent className="px-6 py-4">
                             <div className="flex items-center justify-between">
                                 <div>

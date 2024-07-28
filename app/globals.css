@@ -89,3 +89,12 @@
 html, body {
   height: 100%;
 }
+
+/* For the guestbook card shadow on hover */
+.card-shadow {
+  @apply shadow-sm transition-shadow hover:shadow-lg;
+}
+
+.dark .card-shadow {
+  @apply dark:shadow-[0_4px_6px_rgba(255,255,255,0.1)] dark:hover:shadow-[0_10px_15px_rgba(255,255,255,0.2)];
+}
