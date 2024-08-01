@@ -36,7 +36,15 @@ export default function RootLayout(props: RootLayoutProps) {
                 <meta name="application-name" content={firstBase}/>
                 <meta name="mobile-web-app-capable" content="yes"/>
                 <meta name="apple-mobile-web-app-capable" content="yes"/>
+                <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+                <meta name="format-detection" content="telephone=no"/>
+                <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32-circle.png"/>
+                <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16-circle.png"/>
+                <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180-circle.png"/>
                 <meta name="theme-color" content="#143999"/>
+                {/*                <link rel="icon" href="/favicon.ico"/>*/}
+                {/*<link rel="manifest" href="/manifest.json" crossOrigin="use-credentials"/>*/}
+
                 <style>{`body { font-family: ${fontSans}; }`}</style>
             </Head>
             <NaviMenu/>
