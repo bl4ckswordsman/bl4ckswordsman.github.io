@@ -1,51 +1,64 @@
+"use client";
+
 import {
-    NavigationMenu,
     NavigationMenuContent,
     NavigationMenuItem,
-    NavigationMenuList,
-    NavigationMenuTrigger
+    NavigationMenuTrigger,
+    NavigationMenuLink
 } from "@/components/ui/navigation-menu";
-import React from "react";
-import {usePathname} from "next/navigation";
-import {Button} from "@/components/ui/button";
-import NextLink from "next/link";
+import React, {useState, useEffect} from "react";
+import Link from "next/link";
+import {getDescription, metadata} from "@/app/metadata";
 
 export interface DropdownItem {
     name: string;
     href: string;
+    key?: keyof typeof metadata.descriptions;
 }
 
 export interface NavbarDropdownProps {
-    dropdownName?: string;
+    dropdownName: string;
     items: DropdownItem[];
-    minWidthClass?: string;
 }
 
-export const NavbarDropdown: React.FC<NavbarDropdownProps> = ({dropdownName, items, minWidthClass}) => {
-    const pathname = usePathname();
+export const NavbarDropdown: React.FC<NavbarDropdownProps> = ({dropdownName, items}) => {
+    // Force CSR
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
+
+    if (!isClient) {
+        return null; // or a loading placeholder
+    }
 
     return (
-        <NavigationMenu>
-            <NavigationMenuItem>
-                <NavigationMenuTrigger
-                    className={`${minWidthClass} bg-transparent`}> {/*${buttonVariants({variant: "ghost"})}*/}
-                    <p className="text-inherit">{dropdownName}</p>
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                    <ul className={`grid gap-3 p-3 content-center w-max lg:grid-cols-1 ${minWidthClass}`}>
-                        {items.map((item, index) => (
-                            <NavigationMenuList key={index} className="w-full">
-                                <Button asChild variant={pathname === item.href ? "default" : "ghost"}
-                                        className="w-full text-center">
-                                    <NextLink href={item.href} scroll={false}>
-                                        {item.name}
-                                    </NextLink>
-                                </Button>
-                            </NavigationMenuList>
-                        ))}
-                    </ul>
-                </NavigationMenuContent>
-            </NavigationMenuItem>
-        </NavigationMenu>
+        <NavigationMenuItem>
+            <NavigationMenuTrigger className="sm:min-w-0 min-w-[150px] bg-[hsl(var(--popover))]">
+                {dropdownName}
+            </NavigationMenuTrigger>
+            <NavigationMenuContent>
+                <ul className={'grid gap-3 p-4 w-[400px]'}>
+                    {items.map((item, index) => (
+                        <li key={index}>
+                            <NavigationMenuLink asChild>
+                                <Link
+                                    href={item.href}
+                                    className={`block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground`}
+                                >
+                                    <div className="text-sm font-medium leading-none">{item.name}</div>
+                                    {item.key && (
+                                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                                            {getDescription(item.key)}
+                                        </p>
+                                    )}
+                                </Link>
+                            </NavigationMenuLink>
+                        </li>
+                    ))}
+                </ul>
+            </NavigationMenuContent>
+        </NavigationMenuItem>
     );
 };

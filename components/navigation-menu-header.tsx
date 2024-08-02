@@ -23,25 +23,36 @@ import {usePathname} from "next/navigation";
 import {Button} from "@/components/ui/button";
 
 export const NAV_ITEMS = [
-    {name: 'Portfolio', href: '/portfolio'},
-    {name: 'AI Chat', href: '/ai-chat'},
+    {name: 'Portfolio', href: '/portfolio', key: 'portfolio'},
+    {name: 'AI Chat', href: '/ai-chat', key: 'aichat'},
     {
         name: 'Github',
-        component: (props: { minWidthClass?: string }) =>
-            <NavbarDropdown minWidthClass={props.minWidthClass}
-                            dropdownName="Github"
-                            items={[
-                                {name: 'Daily hits', href: '/github/hits'},
-                            ]}/>
+        component: () =>
+            <NavbarDropdown
+                dropdownName="Github"
+                items={[
+                    {
+                        name: 'Daily hits',
+                        href: '/github/hits',
+                        key: 'hits'
+                    },
+                    // Add more items as needed
+                ]}
+            />
     },
     {
         name: 'More',
-        component: (props: { minWidthClass?: string }) =>
-            <NavbarDropdown minWidthClass={props.minWidthClass}
-                            dropdownName="More"
-                            items={[
-                                {name: 'Guestbook', href: '/more/guestbook'},
-                            ]}/>
+        component: () =>
+            <NavbarDropdown
+                dropdownName="More"
+                items={[
+                    {
+                        name: 'Guestbook',
+                        href: '/more/guestbook',
+                        key: 'guestbook'
+                    },
+                ]}
+            />
     },
     //{name: 'Projects', href: '/projects'},
     //{name: 'Admin', href: '/admin'},
@@ -59,7 +70,7 @@ const NavbarItemLink: React.FC<NavbarItemLinkProps> = ({href, children, minWidth
 
     return (
         <NavbarItem>
-            <Button asChild variant={pathname === href ? "default" : "ghost"} className={clsx(minWidthClass)}>
+            <Button asChild variant={pathname === href ? "default" : "ghost"} className={clsx(minWidthClass, pathname !== href && "bg-[hsl(var(--popover))]")}>
                 <NextLink href={href} scroll={false}>
                     {children}
                 </NextLink>
@@ -132,6 +143,7 @@ export function NaviMenu() {
                 <NavBarIconButtons/>
             </NavbarContent>
 
+            {/*Navbar in the mobile view*/}
             <NavbarMenu>
                 <div className="flex-col space-y-2">
                     <MenuItems classname="space-y-1" minWidthClass="min-w-[150px]"/>
