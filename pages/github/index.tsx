@@ -25,13 +25,14 @@ const GithubPage: React.FC<NavbarDropdownProps> = ({items}) => {
 export default function Github() {
     const githubNavItem = NAV_ITEMS.find(item => item.name === 'Github');
 
-    // Use optional chaining and nullish coalescing to safely access items
-    const items = githubNavItem?.component?.({})?.props.items ?? [];
+    const GithubComponent = githubNavItem?.component?.();
+    const items = GithubComponent?.props.items ?? [];
+
 
     return (
         <RootLayout titleKey={"github"}>
             <CustomBreadcrumb/>
-            <GithubPage items={items}/>
+            <GithubPage dropdownName="Github" items={items}/>
         </RootLayout>
     );
 }
