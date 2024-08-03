@@ -1,4 +1,3 @@
-//"use client";
 import {motion, useAnimation} from 'framer-motion';
 import {ReactNode, useEffect} from 'react';
 
@@ -13,7 +12,7 @@ export const FadeIn = ({children}: FadeInProps) => {
         controls.start({
             opacity: 1,
             transition: {duration: 1}
-        }).then(r => {
+        }).then(r => { // TODO: Fix unused variable r
         });
     }, [controls]);
 

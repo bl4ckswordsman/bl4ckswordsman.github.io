@@ -1,7 +1,7 @@
 import React from 'react';
-import { Input } from '@/components/ui/input';
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Card, CardContent } from "@/components/ui/card";
+import {Input} from '@/components/ui/input';
+import {ScrollArea} from "@/components/ui/scroll-area";
+import {Card, CardContent} from "@/components/ui/card";
 
 interface RealtimeChatContentProps {
     input: string;

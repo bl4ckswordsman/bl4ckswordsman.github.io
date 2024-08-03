@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import { useTheme } from 'next-themes';
+import React, {useEffect} from 'react';
+import {useTheme} from 'next-themes';
 import '@/app/styles/ParticlesBackground.css';
 
 const ParticlesBackground = () => {
-    const { resolvedTheme } = useTheme();
+    const {resolvedTheme} = useTheme();
 
     useEffect(() => {
         import('particles.js').then(() => {
@@ -110,7 +110,7 @@ const ParticlesBackground = () => {
         });
     }, [resolvedTheme]); // Update the dependency array to use resolvedTheme
 
-    return <div id="particles-js" />;
+    return <div id="particles-js"/>;
 };
 
 export default ParticlesBackground;

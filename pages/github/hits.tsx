@@ -15,7 +15,7 @@ const repos = [
     'bl4ckswordsman/DT096G',
     'bl4ckswordsman/bl4ckswordsman',
     'bl4ckswordsman/ug-thesis-project',
-    // Add more repository links that have the daily-hits badge here
+    // More repository links that have the daily-hits badge to be added here
 ];
 
 const HitsPage = () => {
