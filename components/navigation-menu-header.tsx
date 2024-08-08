@@ -21,6 +21,9 @@ import {NavbarDropdown} from "@/components/navbar-dropdowns";
 import {clsx} from "clsx";
 import {usePathname} from "next/navigation";
 import {Button} from "@/components/ui/button";
+import {Collapsible, CollapsibleContent, CollapsibleTrigger} from "@/components/ui/collapsible";
+import MobileNavItem, {MobileDropdownContent} from "@/components/navbar-mobile";
+import {ChevronRightIcon} from "@radix-ui/react-icons";
 
 export const NAV_ITEMS = [
     {name: 'Portfolio', href: '/portfolio', key: 'portfolio'},
@@ -70,7 +73,8 @@ const NavbarItemLink: React.FC<NavbarItemLinkProps> = ({href, children, minWidth
 
     return (
         <NavbarItem>
-            <Button asChild variant={pathname === href ? "default" : "ghost"} className={clsx(minWidthClass, pathname !== href && "bg-[hsl(var(--popover))]")}>
+            <Button asChild variant={pathname === href ? "default" : "ghost"}
+                    className={clsx(minWidthClass, pathname !== href && "bg-[hsl(var(--popover))]")}>
                 <NextLink href={href} scroll={false}>
                     {children}
                 </NextLink>
@@ -145,10 +149,30 @@ export function NaviMenu() {
 
             {/*Navbar in the mobile view*/}
             <NavbarMenu>
-                <div className="flex-col space-y-2">
-                    <MenuItems classname="space-y-1" minWidthClass="min-w-[150px]"/>
-                    <NavBarIconButtons/>
+                <div className="flex-col space-y-1">
+                    {NAV_ITEMS.map((item, index) =>
+                        item.component ? (
+                            <Collapsible key={index} className="w-full p-1">
+                                <CollapsibleTrigger
+                                    className="flex w-full items-center text-lg font-semibold [&[data-state=open]>svg]:rotate-90"
+                                >
+                                    {item.name}
+                                    <ChevronRightIcon className="ml-auto h-5 w-5 transition-all"/>
+                                </CollapsibleTrigger>
+                                <CollapsibleContent>
+                                    <div className="pl-4 pt-2">
+                                        <MobileDropdownContent component={item.component}/>
+                                    </div>
+                                </CollapsibleContent>
+                            </Collapsible>
+                        ) : (
+                            <MobileNavItem key={index} href={item.href}>
+                                {item.name}
+                            </MobileNavItem>
+                        )
+                    )}
                 </div>
+                <NavBarIconButtons/>
             </NavbarMenu>
         </Navbar>
     )
