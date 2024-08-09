@@ -5,7 +5,13 @@ import {Spacer} from "@nextui-org/react";
 import {FadeIn} from "@/components/fade-in";
 import {LoadingSkeleton} from "@/components/loading-skeleton";
 import {Toaster} from "@/components/ui/sonner"
-import {PortfolioCard, AccordionSection, LanguagesSection, ContactSection} from "@/components/portfolio-comp";
+import {
+    PortfolioCard,
+    AccordionSection,
+    LanguagesSection,
+    ContactSection,
+    SkillsSection
+} from "@/components/portfolio-comp";
 import CustomBreadcrumb from "@/components/breadcrumbs";
 /*import firebase from "firebase/analytics";*/
 
@@ -34,7 +40,7 @@ const PortfolioPage = () => {
             <div className="m-4">
                 <Card className="p-3">
                     <PortfolioCard title="Skills" data={portfolio.skills} renderContent={data => (
-                        <AccordionSection data={data}/>
+                        <SkillsSection skills={data}/>
                     )}/>
                     <Spacer y={cardYSpacing}/>
                     <PortfolioCard title="Experience" data={portfolio.experience} renderContent={data => (

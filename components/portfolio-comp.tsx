@@ -26,7 +26,7 @@ const AccordionItemMemo = React.memo(AccordionItem);
 const renderAccordionItems = (data: any, keys: string[]) => {
     if (!data) {
         //handle runtime errors better by returning a default value
-        return null; // or return a loading indicator, or some other default value
+        return null; // TODO: or return a loading indicator, or some other default value
     }
     return keys.map(key => {
         const {title, descr} = data[key];
@@ -97,3 +97,31 @@ export const ContactSection = ({email}: { email: string }) => (
         </CardNextUI>
     </section>
 );
+
+export const SkillsSection = ({skills}: { skills: any }) => {
+    if (!skills || !skills.computerSkills || !skills.computerSkills.categories) return null;
+
+    // Sort the categories based on the 'order' property
+    const sortedCategories = Object.entries(skills.computerSkills.categories)
+        .sort(([, a], [, b]) => (a as any).order - (b as any).order)
+        .map(([key]) => key);
+
+    return (
+        <section id="skills">
+            <h2 className="text-xl font-bold mb-4">{skills.computerSkills.title}</h2>
+            {sortedCategories.map(categoryKey => {
+                const category = skills.computerSkills.categories[categoryKey];
+                return (
+                    <div key={categoryKey} className="mb-4">
+                        <h3 className="text-lg font-semibold mb-2">{category.title}</h3>
+                        <div className="flex flex-wrap gap-2">
+                            {category.skills.map((skill: string) => (
+                                <Badge key={skill}>{skill}</Badge>
+                            ))}
+                        </div>
+                    </div>
+                );
+            })}
+        </section>
+    );
+};
