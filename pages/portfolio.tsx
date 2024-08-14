@@ -13,10 +13,12 @@ import {
     SkillsSection
 } from "@/components/portfolio-comp";
 import CustomBreadcrumb from "@/components/breadcrumbs";
+import BadgeButton from "@/components/button-badge";
 /*import firebase from "firebase/analytics";*/
 
 const PortfolioPage = () => {
     const [portfolio, setPortfolio] = useState<Record<string, any> | null>({});
+    const [buttonbadges, setButtons] = useState<Record<string, any> | null>({});
     const cardYSpacing = 8;
     const email = process.env.NEXT_PUBLIC_APP_EMAIL || 'email-not-set@e.com';
 
@@ -26,7 +28,10 @@ const PortfolioPage = () => {
             credentials: 'same-origin',
         })
             .then(response => response.json())
-            .then(data => setPortfolio(data))
+            .then(data => {
+                setPortfolio(data);
+                setButtons(data.buttonbadges);
+            })
             .catch(error => console.error('Fetching portfolio data failed:', error));
     }, []);
 
@@ -39,6 +44,16 @@ const PortfolioPage = () => {
         <FadeIn>
             <div className="m-4">
                 <Card className="p-3">
+                    <div className="flex space-x-1">
+                        {buttonbadges && Object.keys(buttonbadges).map(key => {
+                            const buttonbadge = buttonbadges[key];
+                            return (
+                                <BadgeButton key={key} title={buttonbadge.title}
+                                             link={buttonbadge.link} iconKey={key}/>
+                            );
+                        })}
+                    </div>
+                    <Spacer y={cardYSpacing}/>
                     <PortfolioCard title="Skills" data={portfolio.skills} renderContent={data => (
                         <SkillsSection skills={data}/>
                     )}/>
