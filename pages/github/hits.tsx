@@ -15,6 +15,7 @@ const repos = [
     'bl4ckswordsman/DT096G',
     'bl4ckswordsman/bl4ckswordsman',
     'bl4ckswordsman/ug-thesis-project',
+    'bl4ckswordsman/edu-vault',
     // More repository links that have the daily-hits badge to be added here
 ];
 
