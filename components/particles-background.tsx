@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useTheme} from 'next-themes';
-import '@/app/styles/ParticlesBackground.css';
+import '@/app/assets/ParticlesBackground.css';
 
 const ParticlesBackground = () => {
     const {resolvedTheme} = useTheme();

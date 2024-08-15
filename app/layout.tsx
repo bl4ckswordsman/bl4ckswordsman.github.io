@@ -1,6 +1,6 @@
 import {metadata, domainBase, getFullTitle, getDescription, firstBase} from "@/app/metadata";
 import {Inter as FontSans} from "next/font/google"
-import "@/app/globals.css";
+import "@/app/styles/globals.css";
 import {ThemeProvider} from "@/components/theme-provider"
 import {cn} from "@/lib/utils";
 import React from "react";
