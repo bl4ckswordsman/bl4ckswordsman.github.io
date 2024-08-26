@@ -40,7 +40,7 @@
     "firebase-admin": "^12.4.0",
     "framer-motion": "^11.3.24",
     "lucide-react": "^0.428.0",
-    "next": "14.2.5",
+    "next": "14.2.6",
     "next-themes": "^0.3.0",
     "particles.js": "^2.0.0",
     "postcss-flexbugs-fixes": "^5.0.2",
