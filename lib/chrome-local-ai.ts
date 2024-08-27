@@ -9,19 +9,19 @@ export interface AISessionOptions {
     temperature?: number;
 }
 
-export async function checkAIAvailability(): Promise<boolean> {
+export async function checkAICapabilities(): Promise<boolean> {
     // @ts-ignore
-    if (window.ai && typeof window.ai.canCreateTextSession === 'function') {
+    if (window.ai && typeof window.ai.assistant.capabilities === 'function') {
         // @ts-ignore
-        const canCreate = await window.ai.canCreateTextSession();
-        return canCreate !== 'no';
+        const capabilities = await window.ai.assistant.capabilities();
+        return capabilities.available !== 'no';
     }
     return false;
 }
 
 export async function createAISession(options?: AISessionOptions) {
     // @ts-ignore
-    return await window.ai.createTextSession(options);
+    return await window.ai.assistant.create(options);
 }
 
 export function handleAIError(error: unknown): string {

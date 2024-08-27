@@ -14,7 +14,7 @@ import {
     isCompatibleBrowser,
     aiReadyString,
     aiUnavailableString,
-    checkCanCreateTextSession,
+    checkAIAvailability,
     browserVersionReqsString,
     browserReqsString,
     osReqsString
@@ -42,8 +42,8 @@ const BrowserInfoPopover: React.FC<BrowserInfoPopoverProps> = ({children}) => {
 
     const checkAiReadiness = async () => {
         try {
-            const {isReadily} = await checkCanCreateTextSession();
-            setAiReady(isReadily);
+            const {isAvailable} = await checkAIAvailability();
+            setAiReady(isAvailable);
         } catch (error) {
             console.error('Error checking AI readiness:', error);
             setAiReady(false);

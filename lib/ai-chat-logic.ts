@@ -1,11 +1,12 @@
-import {useState, useEffect} from 'react';
-import {AIMessage, checkAIAvailability, createAISession, handleAIError} from '@/lib/chrome-local-ai';
+import {useState, useEffect, useRef} from 'react';
+import {AIMessage, AISessionOptions, checkAICapabilities, createAISession, handleAIError} from '@/lib/chrome-local-ai';
 
 export const useChatLogic = (scrollToBottom: () => void) => {
     const [messages, setMessages] = useState<AIMessage[]>([]);
     const [loading, setLoading] = useState(false);
     const [input, setInput] = useState('');
     const [chatAvailable, setChatAvailable] = useState<boolean>(true);
+    const sessionRef = useRef<any>(null);
 
     // Load messages from localStorage when the component mounts
     useEffect(() => {
@@ -60,10 +61,19 @@ export const useChatLogic = (scrollToBottom: () => void) => {
         setLoading(true);
 
         try {
-            const isAvailable = await checkAIAvailability();
+            const isAvailable = await checkAICapabilities();
             if (isAvailable) {
-                const session = await createAISession();
-                const stream = session.promptStreaming(input);
+                if (!sessionRef.current) {
+                    // @ts-ignore
+                    const capabilities = await window.ai.assistant.capabilities();
+                    const options: AISessionOptions = {
+                        topK: capabilities.defaultTopK,
+                        temperature: capabilities.defaultTemperature,
+                    };
+                    sessionRef.current = await createAISession(options);
+                }
+
+                const stream = sessionRef.current.promptStreaming(input);
 
                 let completeResponse = '';
                 let previousLength = 0;

@@ -1,5 +1,5 @@
 import {useState, useRef, useEffect} from 'react';
-import {checkAIAvailability, createAISession, handleAIError} from '@/lib/chrome-local-ai';
+import {checkAICapabilities, createAISession, handleAIError, AISessionOptions} from '@/lib/chrome-local-ai';
 
 export const useRealtimeChatLogic = () => {
     const [input, setInput] = useState('');
@@ -10,9 +10,15 @@ export const useRealtimeChatLogic = () => {
 
     const initializeSession = async () => {
         try {
-            const isAvailable = await checkAIAvailability();
+            const isAvailable = await checkAICapabilities();
             if (isAvailable) {
-                sessionRef.current = await createAISession();
+                // @ts-ignore
+                const capabilities = await window.ai.assistant.capabilities();
+                const options: AISessionOptions = {
+                    topK: capabilities.defaultTopK,
+                    temperature: capabilities.defaultTemperature,
+                };
+                sessionRef.current = await createAISession(options);
                 setChatAvailable(true);
             } else {
                 setChatAvailable(false);
@@ -24,35 +30,31 @@ export const useRealtimeChatLogic = () => {
     };
 
     useEffect(() => {
-        (async () => {
-            try {
-                await initializeSession();
-            } catch (error) {
-                console.error('Failed to initialize session:', error);
-            }
-        })();
+        initializeSession();
     }, []);
 
     const handleInputChange = async (newInput: string) => {
         setInput(newInput);
         if (sessionRef.current && chatAvailable) {
             try {
-                // Abort previous request if it exists
                 if (abortControllerRef.current) {
                     abortControllerRef.current.abort();
                 }
 
-                // Create new AbortController for this request
                 abortControllerRef.current = new AbortController();
 
                 const stream = sessionRef.current.promptStreaming(newInput, {signal: abortControllerRef.current.signal});
 
-                // Reset the AI response at the start of a new stream
                 setAiResponse('');
 
+                let completeResponse = '';
+                let previousLength = 0;
+
                 for await (const chunk of stream) {
-                    // Directly update the aiResponse with the new chunk
-                    setAiResponse(chunk);
+                    const newContent = chunk.slice(previousLength);
+                    completeResponse += newContent;
+                    setAiResponse(completeResponse);
+                    previousLength = chunk.length;
                 }
             } catch (error: unknown) {
                 if (error instanceof Error && error.name !== 'AbortError') {

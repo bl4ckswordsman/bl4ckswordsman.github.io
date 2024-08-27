@@ -4,7 +4,7 @@ import RootLayout from "@/app/layout";
 import {FadeIn} from "@/components/fade-in";
 import CustomBreadcrumb from "@/components/breadcrumbs";
 import {useChatLogic} from '@/lib/ai-chat-logic';
-import {checkCanCreateTextSession} from "@/utils/ai-chat-browser-compat";
+import {checkAIAvailability} from "@/utils/ai-chat-browser-compat";
 import {useScrollAnchor} from '@/lib/hooks/use-scroll-anchor';
 import {Tabs, TabsList, TabsTrigger, TabsContent} from '@/components/ui/tabs';
 import RealtimeChatContent from "@/components/chat-realtime-content";
@@ -36,8 +36,8 @@ const ChatPage: React.FC = () => {
 
     useEffect(() => {
         (async () => {
-            const result = await checkCanCreateTextSession();
-            setAiReady(result.isReadily);
+            const result = await checkAIAvailability();
+            setAiReady(result.isAvailable);
         })();
     }, []);
 

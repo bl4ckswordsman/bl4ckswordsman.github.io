@@ -18,9 +18,15 @@ export const isCompatibleBrowser = (browserInfo: { browserName: string, browserV
     return {isChromeOrChromium, isVersionCompatible, isOSCompatible};
 };
 
-interface CanCreateTextSessionResponse {
-    isReadily: boolean;
-    status: string | Error;
+interface AIAvailabilityResponse {
+    isAvailable: boolean;
+    status: AICapabilityAvailability | Error;
+}
+
+export enum AICapabilityAvailability {
+    READILY = "readily",
+    AFTER_DOWNLOAD = "after-download",
+    NO = "no"
 }
 
 export const aiUnavailableString: string =
@@ -34,17 +40,25 @@ export const browserVersionReqsString =
 export const osReqsString =
     'Local AI functionality is supported on Linux, Windows, and macOS.';
 
-export async function checkCanCreateTextSession(): Promise<CanCreateTextSessionResponse> {
+export async function checkAIAvailability(): Promise<AIAvailabilityResponse> {
     try {
         // @ts-ignore
-        const status = await window.ai.canCreateTextSession();
-        return {
-            isReadily: status === 'readily',
-            status: status,
-        };
+        if (window.ai && typeof window.ai.assistant.capabilities === 'function') {
+            // @ts-ignore
+            const capabilities = await window.ai.assistant.capabilities();
+            return {
+                isAvailable: capabilities.available !== AICapabilityAvailability.NO,
+                status: capabilities.available,
+            };
+        } else {
+            return {
+                isAvailable: false,
+                status: new Error('AI assistant capabilities not available'),
+            };
+        }
     } catch (error) {
         return {
-            isReadily: false,
+            isAvailable: false,
             status: error instanceof Error ? error : new Error('An unknown error occurred.'),
         };
     }
