@@ -26,6 +26,11 @@ const ChatPage: React.FC = () => {
         clearMessages,
         shortReplies,
         toggleShortReplies,
+        sessionInfo,
+        modelConfig,
+        updateModelConfig,
+        resetModelConfig,
+        terminateSession,
     } = useChatLogic(scrollToBottom);
 
     const {
@@ -56,10 +61,16 @@ const ChatPage: React.FC = () => {
                 <TabsContent value="realtime">
                     <Card>
                         <ChatCardHeader
-                            aiReady={chatAvailable}
+                            aiReady={aiReady}
                             clearMessages={clearMessages}
+                            headerText="AI Chat"
                             shortReplies={shortReplies}
                             toggleShortReplies={toggleShortReplies}
+                            sessionInfo={sessionInfo}
+                            modelConfig={modelConfig}
+                            updateModelConfig={updateModelConfig}
+                            resetModelConfig={resetModelConfig}
+                            terminateSession={terminateSession}
                         />
                         <RealtimeChatContent
                             input={inputRealtime}
@@ -71,8 +82,18 @@ const ChatPage: React.FC = () => {
                 </TabsContent>
                 <TabsContent value="chat">
                     <Card>
-                        <ChatCardHeader headerText="AI Chat" aiReady={aiReady} clearMessages={clearMessages}
-                                        shortReplies={shortReplies} toggleShortReplies={toggleShortReplies}/>
+                        <ChatCardHeader
+                            aiReady={aiReady}
+                            clearMessages={clearMessages}
+                            headerText="AI Chat"
+                            shortReplies={shortReplies}
+                            toggleShortReplies={toggleShortReplies}
+                            sessionInfo={sessionInfo}
+                            modelConfig={modelConfig}
+                            updateModelConfig={updateModelConfig}
+                            resetModelConfig={resetModelConfig}
+                            terminateSession={terminateSession}
+                        />
                         <ChatContent messages={messages} input={input} loading={loading} chatAvailable={chatAvailable}
                                      setInput={setInput} handleSend={handleSend}
                                      containerRef={containerRef} messagesRef={messagesRef}/>

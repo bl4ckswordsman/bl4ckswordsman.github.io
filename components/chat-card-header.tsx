@@ -5,7 +5,7 @@ import {IoIosClose, IoIosCheckmark} from "react-icons/io";
 import {Button as NextUIButton} from "@nextui-org/button";
 import {HiSparkles} from "react-icons/hi2";
 import BrowserInfoPopover from "@/components/browser-info-popover";
-import SettingsPopover from "@/components/chat-settings-drawer";
+import SettingsDrawer from "@/components/chat-settings-drawer";
 
 interface ChatCardHeaderProps {
     aiReady: boolean | null;
@@ -13,11 +13,31 @@ interface ChatCardHeaderProps {
     headerText?: string;
     shortReplies: boolean;
     toggleShortReplies: () => void;
+    sessionInfo: {
+        tokensSoFar: number;
+        maxTokens: number;
+        tokensLeft: number;
+    };
+    modelConfig: {
+        topK: number;
+        temperature: number;
+    };
+    updateModelConfig: (config: { topK?: number; temperature?: number }) => void;
+    resetModelConfig: () => void;
+    terminateSession: () => void;
 }
 
 const ChatCardHeader: React.FC<ChatCardHeaderProps> = ({
-                                                           aiReady, clearMessages, headerText = "AI Chat", shortReplies,
-                                                           toggleShortReplies
+                                                           aiReady,
+                                                           clearMessages,
+                                                           headerText = "AI Chat",
+                                                           shortReplies,
+                                                           toggleShortReplies,
+                                                           sessionInfo,
+                                                           modelConfig,
+                                                           updateModelConfig,
+                                                           resetModelConfig,
+                                                           terminateSession
                                                        }) => {
     const buttonColor = aiReady ? "success" : "danger";
     const badgeContent = aiReady ? <IoIosCheckmark/> : <IoIosClose/>;
@@ -27,10 +47,15 @@ const ChatCardHeader: React.FC<ChatCardHeaderProps> = ({
             <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold">{headerText}</h3>
                 <div className="space-x-4">
-                    <SettingsPopover
+                    <SettingsDrawer
                         clearMessages={clearMessages}
                         shortReplies={shortReplies}
                         toggleShortReplies={toggleShortReplies}
+                        sessionInfo={sessionInfo}
+                        modelConfig={modelConfig}
+                        updateModelConfig={updateModelConfig}
+                        resetModelConfig={resetModelConfig}
+                        terminateSession={terminateSession}
                     />
                     <Badge isOneChar content={badgeContent} color={buttonColor} placement="bottom-left">
                         <BrowserInfoPopover>

@@ -11,6 +11,73 @@ export const useChatLogic = (scrollToBottom: () => void) => {
         typeof window !== 'undefined' && localStorage.getItem('shortReplies') === 'true'
     );
 
+    const [sessionInfo, setSessionInfo] = useState({
+        tokensSoFar: 0,
+        maxTokens: 0,
+        tokensLeft: 0,
+    });
+
+    const [modelConfig, setModelConfig] = useState({
+        topK: 0,
+        temperature: 0,
+    });
+
+    useEffect(() => {
+        if (sessionRef.current) {
+            updateSessionInfo();
+        }
+    }, [messages]);
+
+    const updateSessionInfo = () => {
+        if (sessionRef.current) {
+            setSessionInfo({
+                tokensSoFar: sessionRef.current.tokensSoFar,
+                maxTokens: sessionRef.current.maxTokens,
+                tokensLeft: sessionRef.current.tokensLeft,
+            });
+        }
+    };
+
+    const updateModelConfig = useCallback(async (config: { topK?: number; temperature?: number }) => {
+        if (sessionRef.current) {
+            try {
+                await sessionRef.current.updateConfig(config);
+                setModelConfig(prevConfig => ({...prevConfig, ...config}));
+            } catch (error) {
+                console.error('Failed to update model configuration:', error);
+            }
+        }
+    }, []);
+
+    const resetModelConfig = useCallback(async () => {
+        if (sessionRef.current) {
+            try {
+                // @ts-ignore
+                const capabilities = await window.ai.assistant.capabilities();
+                const defaultConfig = {
+                    topK: capabilities.defaultTopK ?? 0,
+                    temperature: capabilities.defaultTemperature ?? 0,
+                };
+                await sessionRef.current.updateConfig(defaultConfig);
+                setModelConfig(defaultConfig);
+            } catch (error) {
+                console.error('Failed to reset model configuration:', error);
+            }
+        }
+    }, []);
+
+    const terminateSession = useCallback(() => {
+        if (sessionRef.current) {
+            sessionRef.current.destroy();
+            sessionRef.current = null;
+            setSessionInfo({
+                tokensSoFar: 0,
+                maxTokens: 0,
+                tokensLeft: 0,
+            });
+        }
+    }, []);
+
     // Load messages from localStorage when the component mounts
     useEffect(() => {
         const savedMessages = localStorage.getItem('messages');
@@ -75,10 +142,14 @@ export const useChatLogic = (scrollToBottom: () => void) => {
                     // @ts-ignore
                     const capabilities = await window.ai.assistant.capabilities();
                     const options: AISessionOptions = {
-                        topK: capabilities.defaultTopK,
-                        temperature: capabilities.defaultTemperature,
+                        topK: capabilities.defaultTopK ?? 0,
+                        temperature: capabilities.defaultTemperature ?? 0,
                     };
                     sessionRef.current = await createAISession(options);
+                    setModelConfig({
+                        topK: options.topK ?? 0,
+                        temperature: options.temperature ?? 0,
+                    });
                 }
 
                 const stream = sessionRef.current.promptStreaming(input);
@@ -94,6 +165,7 @@ export const useChatLogic = (scrollToBottom: () => void) => {
                     updateLastMessage(completeResponse);
                     previousLength = chunk.length;
                 }
+                updateSessionInfo();
             } else {
                 appendMessage('Sorry, the AI model is not available on your device.', 'ai');
                 setChatAvailable(false);
@@ -131,5 +203,10 @@ export const useChatLogic = (scrollToBottom: () => void) => {
         clearMessages,
         shortReplies,
         toggleShortReplies,
+        sessionInfo,
+        modelConfig,
+        updateModelConfig,
+        resetModelConfig,
+        terminateSession,
     };
 };
