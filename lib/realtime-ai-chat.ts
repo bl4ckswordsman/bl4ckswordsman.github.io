@@ -30,7 +30,7 @@ export const useRealtimeChatLogic = () => {
     };
 
     useEffect(() => {
-        initializeSession();
+        initializeSession().then(r => r);
     }, []);
 
     const handleInputChange = async (newInput: string) => {
