@@ -11,9 +11,14 @@ interface ChatCardHeaderProps {
     aiReady: boolean | null;
     clearMessages: () => void;
     headerText?: string;
+    shortReplies: boolean;
+    toggleShortReplies: () => void;
 }
 
-const ChatCardHeader: React.FC<ChatCardHeaderProps> = ({aiReady, clearMessages, headerText = "AI Chat"}) => {
+const ChatCardHeader: React.FC<ChatCardHeaderProps> = ({
+                                                           aiReady, clearMessages, headerText = "AI Chat", shortReplies,
+                                                           toggleShortReplies
+                                                       }) => {
     const buttonColor = aiReady ? "success" : "danger";
     const badgeContent = aiReady ? <IoIosCheckmark/> : <IoIosClose/>;
 
@@ -22,7 +27,11 @@ const ChatCardHeader: React.FC<ChatCardHeaderProps> = ({aiReady, clearMessages, 
             <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold">{headerText}</h3>
                 <div className="space-x-4">
-                    <SettingsPopover clearMessages={clearMessages} />
+                    <SettingsPopover
+                        clearMessages={clearMessages}
+                        shortReplies={shortReplies}
+                        toggleShortReplies={toggleShortReplies}
+                    />
                     <Badge isOneChar content={badgeContent} color={buttonColor} placement="bottom-left">
                         <BrowserInfoPopover>
                             <NextUIButton isIconOnly radius={"full"} variant={"ghost"} color={buttonColor}>

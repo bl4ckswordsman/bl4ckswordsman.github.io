@@ -1,4 +1,4 @@
-import {useState, useEffect, useRef} from 'react';
+import {useState, useEffect, useRef, useCallback} from 'react';
 import {AIMessage, AISessionOptions, checkAICapabilities, createAISession, handleAIError} from '@/lib/chrome-local-ai';
 
 export const useChatLogic = (scrollToBottom: () => void) => {
@@ -7,6 +7,9 @@ export const useChatLogic = (scrollToBottom: () => void) => {
     const [input, setInput] = useState('');
     const [chatAvailable, setChatAvailable] = useState<boolean>(true);
     const sessionRef = useRef<any>(null);
+    const [shortReplies, setShortReplies] = useState(
+        typeof window !== 'undefined' && localStorage.getItem('shortReplies') === 'true'
+    );
 
     // Load messages from localStorage when the component mounts
     useEffect(() => {
@@ -36,12 +39,12 @@ export const useChatLogic = (scrollToBottom: () => void) => {
         }
     }, [messages]);
 
-    const appendMessage = (text: string, sender: 'user' | 'ai') => {
+    const appendMessage = useCallback((text: string, sender: 'user' | 'ai') => {
         setMessages(prev => [...prev, {text, sender}]);
         scrollToBottom(); // Use scrollToBottom from useScrollAnchor hook
-    };
+    }, [scrollToBottom]);
 
-    const updateLastMessage = (text: string) => {
+    const updateLastMessage = useCallback((text: string) => {
         setMessages(prev => {
             const updatedMessages = [...prev];
             const lastIndex = updatedMessages.length - 1;
@@ -51,12 +54,17 @@ export const useChatLogic = (scrollToBottom: () => void) => {
             return updatedMessages;
         });
         scrollToBottom(); // Use scrollToBottom from useScrollAnchor hook
-    };
+    }, [scrollToBottom]);
 
-    const handleSend = async () => {
+    const handleSend = useCallback(async () => {
         if (!input.trim()) return;
 
-        appendMessage(input.trim(), 'user');
+        let finalInput = input.trim();
+        if (shortReplies) {
+            finalInput = `Reply shortly to this: ${finalInput}`;
+        }
+
+        appendMessage(finalInput, 'user');
         setInput('');
         setLoading(true);
 
@@ -96,7 +104,15 @@ export const useChatLogic = (scrollToBottom: () => void) => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [input, shortReplies, appendMessage, updateLastMessage]);
+
+    const toggleShortReplies = useCallback(() => {
+        setShortReplies(prev => {
+            const newValue = !prev;
+            localStorage.setItem('shortReplies', newValue.toString());
+            return newValue;
+        });
+    }, []);
 
     // Function to clear messages from state and localStorage
     const clearMessages = () => {
@@ -113,5 +129,7 @@ export const useChatLogic = (scrollToBottom: () => void) => {
         handleSend,
         chatAvailable,
         clearMessages,
+        shortReplies,
+        toggleShortReplies,
     };
 };

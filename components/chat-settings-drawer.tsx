@@ -22,23 +22,43 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from "@/components/ui/drawer";
+import {Checkbox} from "@/components/ui/checkbox";
 
 interface SettingsPopoverProps {
     clearMessages: () => void;
+    shortReplies: boolean;
+    toggleShortReplies: () => void;
 }
 
-const SettingsPopover: React.FC<SettingsPopoverProps> = ({clearMessages}) => {
+const SettingsPopover: React.FC<SettingsPopoverProps> = ({clearMessages, shortReplies, toggleShortReplies}) => {
     const [open, setOpen] = React.useState(false);
     const isDesktop = useMediaQuery("(min-width: 768px)");
+
+    const handleCheckboxChange = () => {
+        toggleShortReplies();
+    };
 
     const content = (
         <div className="m-2">
             <ButtonWithIcon
                 onClick={clearMessages}
-                Icon={<EraserIcon className="h-4 w-4 mr-2"/>}
+                Icon={<EraserIcon className="h-4 w-4 mr-2" />}
                 variant={"secondary"}
                 buttonText={"Clear Messages"}
             />
+            <div className="mt-4 flex items-center space-x-2">
+                <Checkbox
+                    id="short-replies"
+                    checked={shortReplies}
+                    onCheckedChange={handleCheckboxChange}
+                />
+                <label
+                    htmlFor="short-replies"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                    Short replies
+                </label>
+            </div>
         </div>
     );
 

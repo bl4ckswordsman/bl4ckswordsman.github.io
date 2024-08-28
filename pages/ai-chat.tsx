@@ -24,6 +24,8 @@ const ChatPage: React.FC = () => {
         handleSend,
         chatAvailable,
         clearMessages,
+        shortReplies,
+        toggleShortReplies,
     } = useChatLogic(scrollToBottom);
 
     const {
@@ -53,7 +55,12 @@ const ChatPage: React.FC = () => {
                 </TabsList>
                 <TabsContent value="realtime">
                     <Card>
-                        <ChatCardHeader headerText="Real-time AI Chat" aiReady={aiReady} clearMessages={clearMessages}/>
+                        <ChatCardHeader
+                            aiReady={chatAvailable}
+                            clearMessages={clearMessages}
+                            shortReplies={shortReplies}
+                            toggleShortReplies={toggleShortReplies}
+                        />
                         <RealtimeChatContent
                             input={inputRealtime}
                             aiResponse={aiResponseRealtime}
@@ -64,7 +71,8 @@ const ChatPage: React.FC = () => {
                 </TabsContent>
                 <TabsContent value="chat">
                     <Card>
-                        <ChatCardHeader headerText="AI Chat" aiReady={aiReady} clearMessages={clearMessages}/>
+                        <ChatCardHeader headerText="AI Chat" aiReady={aiReady} clearMessages={clearMessages}
+                                        shortReplies={shortReplies} toggleShortReplies={toggleShortReplies}/>
                         <ChatContent messages={messages} input={input} loading={loading} chatAvailable={chatAvailable}
                                      setInput={setInput} handleSend={handleSend}
                                      containerRef={containerRef} messagesRef={messagesRef}/>
