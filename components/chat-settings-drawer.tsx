@@ -75,8 +75,8 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
     );
 
     const content = (
-        <ScrollArea className={isDesktop ? "max-h-[calc(100vh-8rem)] pr-3" : "max-h-[calc(100vh-12rem)] pr-3"}>
-            <div className="space-y-4">
+        <ScrollArea className={isDesktop ? "max-h-[calc(100vh-8rem)]" : "h-[calc(100vh-26rem)]"}>
+            <div className="space-y-4 pr-4">
                 <div>
                     <h3 className="font-semibold mb-2">Session Information</h3>
                     <p>Tokens used: {sessionInfo.tokensSoFar}</p>
