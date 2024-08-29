@@ -75,7 +75,7 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
     );
 
     const content = (
-        <ScrollArea className={isDesktop ? "max-h-[calc(100vh-8rem)]" : "h-[calc(100vh-26rem)]"}>
+        <ScrollArea className={isDesktop ? "max-h-[calc(100vh-8rem)]" : "h-[calc(70vh-150px)]"}>
             <div className="space-y-4 pr-4">
                 <div>
                     <h3 className="font-semibold mb-2">Session Information</h3>
