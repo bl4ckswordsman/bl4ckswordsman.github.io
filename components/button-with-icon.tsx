@@ -12,6 +12,7 @@ interface ButtonWithIconProps {
     Icon: ReactNode;
     buttonText?: string;
     tooltipText?: string;
+    disabled?: boolean;
     children?: ReactNode;
 }
 
@@ -22,6 +23,7 @@ export function ButtonWithIcon({
                                    Icon,
                                    buttonText = "",
                                    tooltipText = "",
+                                   disabled = false,
                                    children
                                }: ButtonWithIconProps) {
     const shouldShowTooltip = tooltipText && tooltipText.trim().length > 0;
@@ -29,7 +31,7 @@ export function ButtonWithIcon({
         <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger asChild>
-                    <Button size={size} variant={variant} onClick={onClick}>
+                    <Button size={size} variant={variant} onClick={onClick} disabled={disabled}>
                         {Icon}
                         {buttonText}
                         {children}
@@ -41,7 +43,7 @@ export function ButtonWithIcon({
             </Tooltip>
         </TooltipProvider>
     ) : (
-        <Button size={size} variant={variant} onClick={onClick}>
+        <Button size={size} variant={variant} onClick={onClick} disabled={disabled}>
             {Icon}
             {buttonText}
             {children}
