@@ -42,6 +42,7 @@ interface SettingsDrawerProps {
     updateModelConfig: (config: { topK?: number; temperature?: number }) => void;
     resetModelConfig: () => void;
     terminateSession: () => void;
+    aiAvailable: boolean | null;
 }
 
 const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
@@ -52,7 +53,8 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                                                            modelConfig,
                                                            updateModelConfig,
                                                            resetModelConfig,
-                                                           terminateSession
+                                                           terminateSession,
+                                                           aiAvailable,
                                                        }) => {
     const [open, setOpen] = React.useState(false);
     const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -92,6 +94,7 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                             type="number"
                             value={localTopK}
                             onChange={(e) => setLocalTopK(Number(e.target.value))}
+                            disabled={!aiAvailable}
                         />
                     </div>
                     <div className="space-y-2 mt-2">
@@ -102,11 +105,13 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                             step="0.1"
                             value={localTemperature}
                             onChange={(e) => setLocalTemperature(Number(e.target.value))}
+                            disabled={!aiAvailable}
                         />
                     </div>
                     <div className="flex space-x-2 mt-2">
-                        <Button onClick={handleUpdateConfig}>Update Config</Button>
-                        <Button onClick={resetModelConfig} variant="outline">Reset to Default</Button>
+                        <Button onClick={handleUpdateConfig} disabled={!aiAvailable}>Update Config</Button>
+                        <Button onClick={resetModelConfig} variant="outline" disabled={!aiAvailable}>Reset to
+                            Default</Button>
                     </div>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -114,6 +119,7 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                         id="short-replies"
                         checked={shortReplies}
                         onCheckedChange={toggleShortReplies}
+                        disabled={!aiAvailable}
                     />
                     <Label htmlFor="short-replies">Enable Short Replies</Label>
                 </div>
@@ -122,12 +128,14 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                     Icon={<EraserIcon className="h-4 w-4 mr-2"/>}
                     variant="secondary"
                     buttonText="Clear Chat History"
+                    disabled={!aiAvailable}
                 />
                 <ButtonWithIcon
                     onClick={terminateSession}
                     Icon={<ResetIcon className="h-4 w-4 mr-2"/>}
                     variant="destructive"
                     buttonText="Terminate Session"
+                    disabled={!aiAvailable}
                 />
             </div>
         </ScrollArea>

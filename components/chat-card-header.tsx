@@ -56,6 +56,7 @@ const ChatCardHeader: React.FC<ChatCardHeaderProps> = ({
                         updateModelConfig={updateModelConfig}
                         resetModelConfig={resetModelConfig}
                         terminateSession={terminateSession}
+                        aiAvailable={aiReady}
                     />
                     <Badge isOneChar content={badgeContent} color={buttonColor} placement="bottom-left">
                         <BrowserInfoPopover>
