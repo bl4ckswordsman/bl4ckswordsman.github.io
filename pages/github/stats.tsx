@@ -8,6 +8,11 @@ import {
     ResizableHandle, ResizablePanel, ResizablePanelGroup,
 } from "@/components/ui/resizable"
 import CustomBreadcrumb from "@/components/breadcrumbs";
+import GitHubCalendar from 'react-github-calendar';
+import {Card, CardContent, CardHeader} from "@/components/ui/card";
+import {Spacer} from "@nextui-org/react";
+import {Separator} from "@/components/ui/separator";
+import {useCurrentTheme} from "@/lib/hooks/use-current-theme";
 
 const repos = [
     'bl4ckswordsman/CerberusTiles',
@@ -19,8 +24,9 @@ const repos = [
     // More repository links that have the daily-hits badge to be added here
 ];
 
-const HitsPage = () => {
+const StatsPage = () => {
     const [repo, setRepo] = useState('');
+    const theme = useCurrentTheme();
 
     const handleShow = (repo: React.SetStateAction<string>) => {
         setRepo(repo);
@@ -33,6 +39,7 @@ const HitsPage = () => {
             <ResizablePanelGroup
                 direction="horizontal"
                 className="rounded-lg border"
+
             >
                 <ResizablePanel defaultSize={35} className="p-3">
                     <div>
@@ -64,17 +71,24 @@ const HitsPage = () => {
                     )}
                 </ResizablePanel>
             </ResizablePanelGroup>
+            <Spacer y={2}/>
+            <Card>
+                <CardHeader className="text-lg font-semibold">GitHub Activity</CardHeader>
+                <Separator/>
+                <CardContent className="p-3">
+                    <GitHubCalendar weekStart={1} username="bl4ckswordsman" colorScheme={theme}/>
+                </CardContent>
+            </Card>
         </div>
-
     );
 };
 
-export default function Hits() {
+export default function Stats() {
     return (
-        <RootLayout titleKey={"hits"}>
+        <RootLayout titleKey={"stats"}>
             <FadeIn>
                 <CustomBreadcrumb/>
-                <HitsPage/>
+                <StatsPage/>
             </FadeIn>
         </RootLayout>
     );

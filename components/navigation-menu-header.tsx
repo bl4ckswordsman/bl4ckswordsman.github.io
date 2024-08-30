@@ -35,9 +35,9 @@ export const NAV_ITEMS = [
                 dropdownName="Github"
                 items={[
                     {
-                        name: 'Daily hits',
-                        href: '/github/hits',
-                        key: 'hits'
+                        name: 'GitHub stats',
+                        href: '/github/stats',
+                        key: 'stats'
                     },
                     // Add more items as needed
                 ]}
