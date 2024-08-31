@@ -18,7 +18,7 @@ export const metadata = {
         portfolio: `Discover ${firstBase}'s portfolio. A showcase of projects and skills.`,
         github: `Explore ${firstBase}'s GitHub related content.`,
         aichat: `Interact with the experimental Chrome built-in AI. Experience fast&local AI in action.`,
-        stats: `View ${firstBase} GitHub stats like daily hits/visits and activity.`,
+        stats: `View ${firstBase}'s GitHub stats like daily hits/visits and activity.`,
         guestbook: `Leave a message for ${firstBase} in the guestbook.`,
         repos: `Browse through ${firstBase}'s GitHub repositories.`,
         // Other page descriptions to be added here

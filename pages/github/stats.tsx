@@ -1,76 +1,105 @@
 "use client"
 import "@/app/layout";
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import RootLayout from "@/app/layout";
 import {FadeIn} from "@/components/fade-in";
-import {Button} from "@/components/ui/button";
-import {
-    ResizableHandle, ResizablePanel, ResizablePanelGroup,
-} from "@/components/ui/resizable"
 import CustomBreadcrumb from "@/components/breadcrumbs";
 import GitHubCalendar from 'react-github-calendar';
 import {Card, CardContent, CardHeader} from "@/components/ui/card";
 import {Spacer} from "@nextui-org/react";
 import {Separator} from "@/components/ui/separator";
 import {useCurrentTheme} from "@/lib/hooks/use-current-theme";
+import ChartCard from "@/components/chart-card";
 
-const repos = [
-    'bl4ckswordsman/CerberusTiles',
-    'bl4ckswordsman/abc_app',
-    'bl4ckswordsman/DT096G',
-    'bl4ckswordsman/bl4ckswordsman',
-    'bl4ckswordsman/ug-thesis-project',
-    'bl4ckswordsman/edu-vault',
-    // More repository links that have the daily-hits badge to be added here
+const REPOS = [
+    {value: 'bl4ckswordsman/CerberusTiles', label: 'CerberusTiles'},
+    {value: 'bl4ckswordsman/abc_app', label: 'abc_app'},
+    {value: 'bl4ckswordsman/DT096G', label: 'DT096G'},
+    {value: 'bl4ckswordsman/bl4ckswordsman', label: 'bl4ckswordsman'},
+    {value: 'bl4ckswordsman/ug-thesis-project', label: 'ug-thesis-project'},
+    {value: 'bl4ckswordsman/edu-vault', label: 'edu-vault'},
 ];
 
 const StatsPage = () => {
-    const [repo, setRepo] = useState('');
+    const [open, setOpen] = useState(false);
+    const [value, setValue] = useState("");
+    const [chartData, setChartData] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [lastUpdated, setLastUpdated] = useState<string | null>(null);
     const theme = useCurrentTheme();
 
-    const handleShow = (repo: React.SetStateAction<string>) => {
-        setRepo(repo);
+    const fetchData = async (repo: string): Promise<void> => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await fetch(`/api/github-hits?repo=${encodeURIComponent(repo)}`);
+            let data;
+            if (!response.ok) {
+                const errorText = await response.text();
+                let errorMessage;
+                try {
+                    const errorData = JSON.parse(errorText);
+                    errorMessage = errorData.error || 'Failed to fetch data';
+                } catch {
+                    errorMessage = errorText || 'Failed to fetch data';
+                }
+                setError(errorMessage);
+                return; // Exit the function early
+            } else {
+                data = await response.json();
+            }
+            setChartData(data);
+            const timestamp = Date.now();
+            localStorage.setItem(repo, JSON.stringify({
+                data,
+                timestamp
+            }));
+            setLastUpdated(new Date(timestamp).toLocaleString());
+        } catch (err) {
+            console.error("Error fetching data:", err);
+            setError(err instanceof Error ? err.message : 'Unknown error');
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const dailyHitsBaseUrl = 'https://hits.seeyoufarm.com/api/count/graph/dailyhits.svg?url=https://github.com/';
+    useEffect(() => {
+        if (value) {
+            const storedData = localStorage.getItem(value);
+            if (storedData) {
+                const {data, timestamp} = JSON.parse(storedData);
+                if (Date.now() - timestamp < 12 * 60 * 60 * 1000) {
+                    setChartData(data);
+                    setLastUpdated(new Date(timestamp).toLocaleString());
+                    return;
+                }
+            }
+            fetchData(value).catch(console.error);
+        }
+    }, [value]);
+
+    const handleRefresh = () => {
+        if (value) {
+            fetchData(value).catch(console.error);
+        }
+    };
 
     return (
         <div className="m-4">
-            <ResizablePanelGroup
-                direction="horizontal"
-                className="rounded-lg border"
-
-            >
-                <ResizablePanel defaultSize={35} className="p-3">
-                    <div>
-                        {repos.map((repoPath, index) => {
-                            const repoName = repoPath.split('/')[1]; // Split the string at '/' and take the second part
-                            return (
-                                <Button
-                                    key={index}
-                                    variant={repoPath === repo ? "secondary" : "outline"} // Change the variant based on whether the repo is selected
-                                    className="m-2 w-48"
-                                    onClick={() => handleShow(repoPath)}
-                                >
-                                    {repoName} {/* Use the repository name as the button label */}
-                                </Button>
-                            );
-                        })}
-                    </div>
-                </ResizablePanel>
-                <ResizableHandle withHandle/>
-                <ResizablePanel defaultSize={65}>
-                    {repo && (
-                        <div className="w-full p-3 overflow-auto">
-                            <div style={{transform: 'scale(0.7)', transformOrigin: '0 0'}}>
-                                <iframe id="contentiframe"
-                                        className="w-[660px] h-[310px] border-0"
-                                        src={`${dailyHitsBaseUrl}${repo}`}></iframe>
-                            </div>
-                        </div>
-                    )}
-                </ResizablePanel>
-            </ResizablePanelGroup>
+            {/* Replaced ResizablePanelGroup with ChartCard */}
+            <ChartCard
+                REPOS={REPOS}
+                value={value}
+                setValue={setValue}
+                chartData={chartData}
+                loading={loading}
+                error={error}
+                open={open}
+                setOpen={setOpen}
+                handleRefresh={handleRefresh}
+                lastUpdated={lastUpdated}
+            />
             <Spacer y={2}/>
             <Card>
                 <CardHeader className="text-lg font-semibold">GitHub Activity</CardHeader>
