@@ -42,7 +42,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
         [chartData]);
 
     return (
-        <Card className="w-full max-w-3xl mx-auto">
+        <Card>
             <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
                 <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
                     <h2 className="text-lg font-semibold">GitHub Daily Hits</h2>
