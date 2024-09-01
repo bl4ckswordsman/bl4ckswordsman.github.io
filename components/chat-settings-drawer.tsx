@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useMediaQuery} from "@/lib/hooks/use-media-query";
 import {Button} from "@/components/ui/button";
-import {GearIcon, EraserIcon, ResetIcon} from "@radix-ui/react-icons";
+import {GearIcon, EraserIcon, CrossCircledIcon} from "@radix-ui/react-icons";
 import {ButtonWithIcon} from "@/components/button-with-icon";
 import {
     Dialog,
@@ -132,7 +132,7 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                 />
                 <ButtonWithIcon
                     onClick={terminateSession}
-                    Icon={<ResetIcon className="h-4 w-4 mr-2"/>}
+                    Icon={<CrossCircledIcon className="h-4 w-4 mr-2"/>}
                     variant="destructive"
                     buttonText="Terminate Session"
                     disabled={!aiAvailable}
