@@ -108,5 +108,5 @@ html, body {
 }
 
 .dark .card-shadow {
-  @apply dark:shadow-[0_4px_6px_rgba(255,255,255,0.1)] dark:hover:shadow-[0_10px_15px_rgba(255,255,255,0.2)];
+  @apply dark:hover:shadow-[0_10px_15px_rgba(255,255,255,0.2)];
 }
