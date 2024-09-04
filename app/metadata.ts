@@ -11,6 +11,7 @@ export const metadata = {
         stats: "GitHub Stats",
         guestbook: "Guestbook",
         repos: "GitHub Repositories",
+        more: "More",
         // Other page titles to be added here
     },
     descriptions: {
@@ -21,6 +22,7 @@ export const metadata = {
         stats: `View ${firstBase}'s GitHub stats like daily hits/visits and activity.`,
         guestbook: `Leave a message for ${firstBase} in the guestbook.`,
         repos: `Browse through ${firstBase}'s GitHub repositories.`,
+        more: `Explore more content from ${firstBase}.`,
         // Other page descriptions to be added here
     },
     generalDescription: `🚀 Explore the digital realm with ${firstBase} (aka ${secondBase})!
