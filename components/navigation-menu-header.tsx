@@ -29,10 +29,10 @@ export const NAV_ITEMS = [
     {name: 'Portfolio', href: '/portfolio', key: 'portfolio'},
     {name: 'AI Chat', href: '/ai-chat', key: 'aichat'},
     {
-        name: 'Github',
+        name: 'GitHub',
         component: () =>
             <NavbarDropdown
-                dropdownName="Github"
+                dropdownName="GitHub"
                 items={[
                     {
                         name: 'GitHub stats',
