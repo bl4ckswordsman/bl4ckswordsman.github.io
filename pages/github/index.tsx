@@ -1,38 +1,13 @@
 import React from 'react';
-import {DropdownItem, NavbarDropdownProps} from "@/components/navbar-dropdowns";
-import RootLayout from "@/app/layout";
-import {Button} from "@/components/ui/button";
-import NextLink from "next/link";
 import {NAV_ITEMS} from "@/components/navigation-menu-header";
-import CustomBreadcrumb from "@/components/breadcrumbs";
+import CategoryPageContent from "@/components/category-page-content";
 
-const GithubPage: React.FC<NavbarDropdownProps> = ({items}) => {
-    return (
-        <div className="m-4">
-            {items.map((item: DropdownItem, index: number) => (
-                <div key={index} className="m-2">
-                    <Button size="lg" variant="secondary">
-                        <NextLink href={item.href} scroll={false}>
-                            {item.name}
-                        </NextLink>
-                    </Button>
-                </div>
-            ))}
-        </div>
-    );
-};
+export default function More() {
+    const dropdownName = 'GitHub';
 
-export default function Github() {
-    const githubNavItem = NAV_ITEMS.find(item => item.name === 'Github');
+    const githubNavItem = NAV_ITEMS.find(item => item.name === dropdownName);
+    const githubComponent = githubNavItem?.component?.();
+    const items = githubComponent?.props.items ?? [];
 
-    const GithubComponent = githubNavItem?.component?.();
-    const items = GithubComponent?.props.items ?? [];
-
-
-    return (
-        <RootLayout titleKey={"github"}>
-            <CustomBreadcrumb/>
-            <GithubPage dropdownName="Github" items={items}/>
-        </RootLayout>
-    );
+    return <CategoryPageContent items={items} titleKey="github" dropdownName={dropdownName}/>;
 }
