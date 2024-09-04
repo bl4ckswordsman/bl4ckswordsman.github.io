@@ -8,6 +8,7 @@ import React from "react";
 import GuestbookEntries from "@/components/guestbook-entries";
 import GuestbookForm from "@/components/guestbook-form";
 import {useGuestbookEntries} from "@/lib/hooks/use-guestbook-entries";
+import CustomBreadcrumb from "@/components/breadcrumbs";
 
 const Guestbook = () => {
     const [entries, fetchEntries] = useGuestbookEntries();
@@ -36,6 +37,7 @@ const Guestbook = () => {
 export default function GuestbookPage() {
     return (
         <RootLayout titleKey={"guestbook"}>
+            <CustomBreadcrumb/>
             <Guestbook/>
         </RootLayout>
     );
