@@ -18,7 +18,7 @@ const Guestbook = () => {
 
     return (
         <div className="m-4">
-            <div className="w-full max-w-4xl mx-auto py-12 md:py-16">
+            <div className="py-12 md:py-16">
                 <div className="space-y-6">
                     <div className="text-center">
                         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Guestbook</h1>
