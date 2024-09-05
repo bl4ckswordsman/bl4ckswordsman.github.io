@@ -35,7 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         res.status(200).json(parsedData);
     } catch (error) {
-        console.error('Error fetching or processing SVG data:', error);
-        res.status(500).json({error: 'Failed to fetch or process SVG data'});
+        console.error('Error fetching or processing SVG data for' + repo + ':', error);
+        res.status(500).json({error: 'Failed to fetch or process SVG data for ' + repo});
     }
 }

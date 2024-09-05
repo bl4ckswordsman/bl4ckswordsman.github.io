@@ -40,9 +40,9 @@ const StatsPage = () => {
                 let errorMessage;
                 try {
                     const errorData = JSON.parse(errorText);
-                    errorMessage = errorData.error || 'Failed to fetch data';
+                    errorMessage = errorData.error || 'Failed to fetch data for ' + repo;
                 } catch {
-                    errorMessage = errorText || 'Failed to fetch data';
+                    errorMessage = errorText || 'Failed to fetch data for ' + repo;
                 }
                 setError(errorMessage);
                 return; // Exit the function early
@@ -87,7 +87,6 @@ const StatsPage = () => {
 
     return (
         <div className="m-4">
-            {/* Replaced ResizablePanelGroup with ChartCard */}
             <ChartCard
                 REPOS={REPOS}
                 value={value}
