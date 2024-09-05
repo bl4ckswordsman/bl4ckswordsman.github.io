@@ -6,6 +6,7 @@ import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandL
 import {Check, ChevronsUpDown, RefreshCw} from "lucide-react";
 import {BarChart, Bar, XAxis, CartesianGrid, Tooltip, ResponsiveContainer, YAxis} from 'recharts';
 import {Alert, AlertDescription} from "@/components/ui/alert";
+import {LoadingSkeleton} from "@/components/loading-skeleton";
 
 interface Repo {
     value: string;
@@ -149,9 +150,11 @@ const ChartCard: React.FC<ChartCardProps> = ({
                     </ResponsiveContainer>
                 ) : (
                     <div className="flex items-center justify-center h-[300px]">
-                        <p className="text-gray-500">
-                            {loading ? "Loading data..." : "Select a repository to view data"}
-                        </p>
+                        {loading ?
+                            <div className="w-full">
+                                <LoadingSkeleton loadingText={"Loading data..."} noCard={true} fitToParent={true}/>
+                            </div>
+                            : <p className="text-gray-500">Select a repository to view data</p>}
                     </div>
                 )}
             </CardContent>
