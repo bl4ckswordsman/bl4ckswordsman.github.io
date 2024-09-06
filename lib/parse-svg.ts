@@ -1,4 +1,4 @@
-import { parseString } from 'xml2js';
+import {parseString} from 'xml2js';
 
 interface GraphData {
     title: string;
@@ -36,7 +36,6 @@ export function parseSVG(svgString: string): Promise<GraphData> {
             };
 
             const textElements = result.svg.text || [];
-            console.log('All text elements:', textElements);
 
             // Extract title (last text element)
             graphData.title = textElements[textElements.length - 1]._;
@@ -47,7 +46,6 @@ export function parseSVG(svgString: string): Promise<GraphData> {
 
             // Extract max y-axis value (second last text element)
             const maxValue = parseFloat(textElements[textElements.length - 2]._);
-            console.log('Calculated max value:', maxValue);
 
             // Extract y-axis data (counts)
             const pathElements = result.svg.path || [];
@@ -62,7 +60,6 @@ export function parseSVG(svgString: string): Promise<GraphData> {
                     const [, y] = point.trim().split(' ');
                     return Math.floor((273 - parseFloat(y)) / (273 - 11) * maxValue);
                 });
-                console.log('Calculated counts:', graphData.counts);
             } else {
                 console.log('No data path found');
             }
