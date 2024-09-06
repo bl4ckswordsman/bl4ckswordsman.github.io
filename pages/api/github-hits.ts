@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
         const url = `https://hits.seeyoufarm.com/api/count/graph/dailyhits.svg?url=https://github.com/${repo}`;
-        console.log(`Fetching data from: ${url}`);
+        // console.log(`Fetching data from: ${url}`);
 
         const response = await fetch(url);
         if (!response.ok) {
@@ -19,7 +19,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         const svgText = await response.text();
-        console.log('SVG data received:', svgText.substring(0, 100) + '...');
 
         const graphData = await parseSVG(svgText);
 
