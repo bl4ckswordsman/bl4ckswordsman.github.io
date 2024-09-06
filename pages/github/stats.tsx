@@ -34,27 +34,16 @@ const StatsPage = () => {
         setError(null);
         try {
             const response = await fetch(`/api/github-hits?repo=${encodeURIComponent(repo)}`);
-            let data;
             if (!response.ok) {
                 const errorText = await response.text();
-                let errorMessage;
-                try {
-                    const errorData = JSON.parse(errorText);
-                    errorMessage = errorData.error || 'Failed to fetch data for ' + repo;
-                } catch {
-                    errorMessage = errorText || 'Failed to fetch data for ' + repo;
-                }
+                const errorMessage = JSON.parse(errorText).error || errorText || `Failed to fetch data for ${repo}`;
                 setError(errorMessage);
-                return; // Exit the function early
-            } else {
-                data = await response.json();
+                return;
             }
-            setChartData(data);
+            const data = await response.json();
             const timestamp = Date.now();
-            localStorage.setItem(repo, JSON.stringify({
-                data,
-                timestamp
-            }));
+            localStorage.setItem(repo, JSON.stringify({data, timestamp}));
+            setChartData(data);
             setLastUpdated(new Date(timestamp).toLocaleString());
         } catch (err) {
             console.error("Error fetching data:", err);
