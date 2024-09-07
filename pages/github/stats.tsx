@@ -18,6 +18,7 @@ const REPOS = [
     {value: 'bl4ckswordsman/bl4ckswordsman', label: 'bl4ckswordsman'},
     {value: 'bl4ckswordsman/ug-thesis-project', label: 'ug-thesis-project'},
     {value: 'bl4ckswordsman/edu-vault', label: 'edu-vault'},
+    {value: 'bl4ckswordsman/bl4ckswordsman.github.io', label: 'bl4ckswordsman.github.io'},
 ];
 
 const StatsPage = () => {
