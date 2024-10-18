@@ -13,7 +13,7 @@ export const useRealtimeChatLogic = () => {
             const isAvailable = await checkAICapabilities();
             if (isAvailable) {
                 // @ts-ignore
-                const capabilities = await window.ai.assistant.capabilities();
+                const capabilities = await window.ai.languageModel.capabilities();
                 const options: AISessionOptions = {
                     topK: capabilities.defaultTopK,
                     temperature: capabilities.defaultTemperature,

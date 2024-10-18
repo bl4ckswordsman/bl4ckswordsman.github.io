@@ -53,7 +53,7 @@ export const useChatLogic = (scrollToBottom: () => void) => {
         if (sessionRef.current) {
             try {
                 // @ts-ignore
-                const capabilities = await window.ai.assistant.capabilities();
+                const capabilities = await window.ai.languageModel.capabilities();
                 const defaultConfig = {
                     topK: capabilities.defaultTopK ?? 0,
                     temperature: capabilities.defaultTemperature ?? 0,
@@ -140,7 +140,7 @@ export const useChatLogic = (scrollToBottom: () => void) => {
             if (isAvailable) {
                 if (!sessionRef.current) {
                     // @ts-ignore
-                    const capabilities = await window.ai.assistant.capabilities();
+                    const capabilities = await window.ai.languageModel.capabilities();
                     const options: AISessionOptions = {
                         topK: capabilities.defaultTopK ?? 0,
                         temperature: capabilities.defaultTemperature ?? 0,

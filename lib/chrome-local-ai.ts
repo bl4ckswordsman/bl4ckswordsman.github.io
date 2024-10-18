@@ -11,9 +11,9 @@ export interface AISessionOptions {
 
 export async function checkAICapabilities(): Promise<boolean> {
     // @ts-ignore
-    if (window.ai && typeof window.ai.assistant.capabilities === 'function') {
+    if (window.ai && typeof window.ai.languageModel.capabilities === 'function') {
         // @ts-ignore
-        const capabilities = await window.ai.assistant.capabilities();
+        const capabilities = await window.ai.languageModel.capabilities();
         return capabilities.available !== 'no';
     }
     return false;
@@ -21,7 +21,7 @@ export async function checkAICapabilities(): Promise<boolean> {
 
 export async function createAISession(options?: AISessionOptions) {
     // @ts-ignore
-    return await window.ai.assistant.create(options);
+    return await window.ai.languageModel.create(options);
 }
 
 export function handleAIError(error: unknown): string {

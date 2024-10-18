@@ -43,9 +43,9 @@ export const osReqsString =
 export async function checkAIAvailability(): Promise<AIAvailabilityResponse> {
     try {
         // @ts-ignore
-        if (window.ai && typeof window.ai.assistant.capabilities === 'function') {
+        if (window.ai && typeof window.ai.languageModel.capabilities === 'function') {
             // @ts-ignore
-            const capabilities = await window.ai.assistant.capabilities();
+            const capabilities = await window.ai.languageModel.capabilities();
             return {
                 isAvailable: capabilities.available !== AICapabilityAvailability.NO,
                 status: capabilities.available,
