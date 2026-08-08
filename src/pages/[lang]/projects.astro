@@ -9,6 +9,8 @@ import { useTranslations } from '@/i18n/i18n';
 import Layout from '@/layouts/Layout.astro';
 import type { GitHubRepo } from '@/data/types';
 
+import { fetchGitHubProjects } from '@/data/getGitHubProjects';
+
 export function getStaticPaths() {
   return SUPPORTED_LOCALES.map((lang) => ({ params: { lang } }));
 }
@@ -16,46 +18,8 @@ export function getStaticPaths() {
 const { lang } = Astro.params as { lang: Locale };
 const t = useTranslations(lang);
 
-// ── Fetch repos at build time ─────────────────────────
-const GITHUB_USERNAME = 'bl4ckswordsman';
-const GITHUB_ORGS     = ['JoestarLabs'];
-let repos: GitHubRepo[] = [];
-
-try {
-  const fetchHeaders: Record<string, string> = {
-    'Accept': 'application/vnd.github.v3+json',
-    ...(import.meta.env.GITHUB_TOKEN
-      ? { Authorization: `Bearer ${import.meta.env.GITHUB_TOKEN}` }
-      : {}),
-  };
-
-  const userReq = fetch(
-    `https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100&sort=pushed&type=owner`,
-    { headers: fetchHeaders }
-  );
-
-  const orgReqs = GITHUB_ORGS.map((org) =>
-    fetch(`https://api.github.com/orgs/${org}/repos?per_page=100&sort=pushed`, {
-      headers: fetchHeaders,
-    })
-  );
-
-  const responses = await Promise.all([userReq, ...orgReqs]);
-  let combined: GitHubRepo[] = [];
-
-  for (const res of responses) {
-    if (res.ok) {
-      const list: GitHubRepo[] = await res.json();
-      combined = combined.concat(list);
-    }
-  }
-
-  repos = combined
-    .filter((r) => !r.fork && !r.archived && r.name !== '.github')
-    .sort((a, b) => b.stargazers_count - a.stargazers_count);
-} catch {
-  // Build continues with empty repos; page shows empty state
-}
+// Fetch repos with rate-limit shield & build caching
+const repos: GitHubRepo[] = await fetchGitHubProjects();
 
 // Derive language dot class
 function langDotClass(lang: string | null): string {
