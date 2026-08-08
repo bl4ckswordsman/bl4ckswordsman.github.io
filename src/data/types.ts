@@ -56,4 +56,8 @@ export interface GitHubRepo {
   pushed_at: string;
   fork: boolean;
   archived: boolean;
+  owner?: {
+    login: string;
+    type: string;
+  };
 }

@@ -18,27 +18,41 @@ const t = useTranslations(lang);
 
 // ── Fetch repos at build time ─────────────────────────
 const GITHUB_USERNAME = 'bl4ckswordsman';
+const GITHUB_ORGS     = ['JoestarLabs'];
 let repos: GitHubRepo[] = [];
 
 try {
-  const res = await fetch(
+  const fetchHeaders: Record<string, string> = {
+    'Accept': 'application/vnd.github.v3+json',
+    ...(import.meta.env.GITHUB_TOKEN
+      ? { Authorization: `Bearer ${import.meta.env.GITHUB_TOKEN}` }
+      : {}),
+  };
+
+  const userReq = fetch(
     `https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100&sort=pushed&type=owner`,
-    {
-      headers: {
-        'Accept': 'application/vnd.github.v3+json',
-        // GITHUB_TOKEN is optional — increases rate limit from 60 to 5000/hr
-        ...(import.meta.env.GITHUB_TOKEN
-          ? { Authorization: `Bearer ${import.meta.env.GITHUB_TOKEN}` }
-          : {}),
-      },
-    }
+    { headers: fetchHeaders }
   );
-  if (res.ok) {
-    const all: GitHubRepo[] = await res.json();
-    repos = all
-      .filter((r) => !r.fork && !r.archived)
-      .sort((a, b) => b.stargazers_count - a.stargazers_count);
+
+  const orgReqs = GITHUB_ORGS.map((org) =>
+    fetch(`https://api.github.com/orgs/${org}/repos?per_page=100&sort=pushed`, {
+      headers: fetchHeaders,
+    })
+  );
+
+  const responses = await Promise.all([userReq, ...orgReqs]);
+  let combined: GitHubRepo[] = [];
+
+  for (const res of responses) {
+    if (res.ok) {
+      const list: GitHubRepo[] = await res.json();
+      combined = combined.concat(list);
+    }
   }
+
+  repos = combined
+    .filter((r) => !r.fork && !r.archived && r.name !== '.github')
+    .sort((a, b) => b.stargazers_count - a.stargazers_count);
 } catch {
   // Build continues with empty repos; page shows empty state
 }
@@ -105,8 +119,11 @@ function relativeDate(iso: string): string {
                 <p class="project-card__desc">{repo.description}</p>
               )}
 
-              {repo.topics.length > 0 && (
+              {(repo.topics.length > 0 || repo.owner?.login === 'JoestarLabs') && (
                 <div class="project-card__topics">
+                  {repo.owner?.login === 'JoestarLabs' && (
+                    <span class="tag tag--platform" title="Organization">🏢 JoestarLabs</span>
+                  )}
                   {repo.topics.slice(0, 4).map((topic) => (
                     <span class="tag">{topic}</span>
                   ))}
