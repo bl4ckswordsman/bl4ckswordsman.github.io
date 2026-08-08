@@ -17,92 +17,19 @@ export function getStaticPaths() {
 const { lang } = Astro.params as { lang: Locale };
 const t = useTranslations(lang);
 
-// ── Reactive Resume public share details ────────────────
-const RXRESUME_USERNAME = 'blackswordsman';
-const RXRESUME_SLUG     = 'a-r-resume';
+import {
+  fetchResumeStats,
+  RXRESUME_USERNAME,
+  RXRESUME_SLUG,
+  type RxResumeExperienceItem,
+  type RxResumeEducationItem,
+  type RxResumeSkillItem,
+  type RxResumeLanguageItem,
+  type RxResumeCertificationItem,
+  type RxResumeProjectItem,
+} from '@/data/getResumeData';
 
-interface RxResumeExperienceItem {
-  id: string;
-  hidden?: boolean;
-  position?: string;
-  company?: string;
-  period?: string;
-  location?: string;
-  description?: string;
-}
-
-interface RxResumeEducationItem {
-  id: string;
-  hidden?: boolean;
-  degree?: string;
-  area?: string;
-  school?: string;
-  period?: string;
-  location?: string;
-  description?: string;
-}
-
-interface RxResumeSkillItem {
-  id: string;
-  hidden?: boolean;
-  name?: string;
-  proficiency?: string;
-  keywords?: string[];
-}
-
-interface RxResumeLanguageItem {
-  id: string;
-  hidden?: boolean;
-  language?: string;
-  fluency?: string;
-  level?: number;
-}
-
-interface RxResumeCertificationItem {
-  id: string;
-  hidden?: boolean;
-  title?: string;
-  issuer?: string;
-  date?: string;
-  website?: { url?: string; label?: string };
-  description?: string;
-}
-
-interface RxResumeProjectItem {
-  id: string;
-  hidden?: boolean;
-  name?: string;
-  period?: string;
-  website?: { url?: string; label?: string };
-  description?: string;
-}
-
-let rxData: any = null;
-let lastUpdated = '';
-
-if (RXRESUME_USERNAME && RXRESUME_SLUG) {
-  try {
-    const res = await fetch('https://rxresu.me/api/rpc/resume/getBySlug', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        json: { username: RXRESUME_USERNAME, slug: RXRESUME_SLUG },
-      }),
-    });
-    if (res.ok) {
-      const raw = await res.json();
-      rxData = raw?.json?.data || raw?.data?.data || raw?.data || raw;
-      if (raw?.json?.updatedAt || rxData?.updatedAt) {
-        const dateStr = raw?.json?.updatedAt || rxData?.updatedAt;
-        lastUpdated = new Intl.DateTimeFormat(lang, { dateStyle: 'medium' }).format(
-          new Date(dateStr)
-        );
-      }
-    }
-  } catch {
-    // Falls back to static data below
-  }
-}
+const { rxData, lastUpdated } = await fetchResumeStats(lang);
 
 // Extracted fields (with fallback)
 const name     = rxData?.basics?.name     || rxData?.name || 'Amarildo';

@@ -7,6 +7,7 @@ import { SUPPORTED_LOCALES, getLocalePath } from '@/i18n/locales';
 import { useTranslations } from '@/i18n/i18n';
 import Layout from '@/layouts/Layout.astro';
 import { portfolio } from '@/data/portfolio';
+import { fetchResumeStats } from '@/data/getResumeData';
 
 export function getStaticPaths() {
   return SUPPORTED_LOCALES.map((lang) => ({ params: { lang } }));
@@ -14,6 +15,7 @@ export function getStaticPaths() {
 
 const { lang } = Astro.params as { lang: Locale };
 const t = useTranslations(lang);
+const stats = await fetchResumeStats(lang);
 ---
 <Layout
   lang={lang}
@@ -61,15 +63,15 @@ const t = useTranslations(lang);
   <section class="container page-section scroll-reveal">
     <div class="hero-stats">
       <div class="hero-stat">
-        <span class="hero-stat__value">{portfolio.skills.length}+</span>
+        <span class="hero-stat__value">{stats.skillsCount}+</span>
         <span class="hero-stat__label">Skills</span>
       </div>
       <div class="hero-stat">
-        <span class="hero-stat__value">{portfolio.experience.length}+</span>
+        <span class="hero-stat__value">{stats.rolesCount}+</span>
         <span class="hero-stat__label">Roles</span>
       </div>
       <div class="hero-stat">
-        <span class="hero-stat__value">{portfolio.spokenLanguages.length}</span>
+        <span class="hero-stat__value">{stats.languagesCount}</span>
         <span class="hero-stat__label">Languages</span>
       </div>
     </div>
