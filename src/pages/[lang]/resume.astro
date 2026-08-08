@@ -82,7 +82,7 @@ let lastUpdated = '';
 
 if (RXRESUME_USERNAME && RXRESUME_SLUG) {
   try {
-    const res = await fetch('https://rxresu.me/api/orpc/resume.getBySlug', {
+    const res = await fetch('https://rxresu.me/api/rpc/resume/getBySlug', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -91,10 +91,11 @@ if (RXRESUME_USERNAME && RXRESUME_SLUG) {
     });
     if (res.ok) {
       const raw = await res.json();
-      rxData = raw?.data || raw;
-      if (rxData?.updatedAt) {
+      rxData = raw?.json?.data || raw?.data?.data || raw?.data || raw;
+      if (raw?.json?.updatedAt || rxData?.updatedAt) {
+        const dateStr = raw?.json?.updatedAt || rxData?.updatedAt;
         lastUpdated = new Intl.DateTimeFormat(lang, { dateStyle: 'medium' }).format(
-          new Date(rxData.updatedAt)
+          new Date(dateStr)
         );
       }
     }
