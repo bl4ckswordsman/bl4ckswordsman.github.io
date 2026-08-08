@@ -1,0 +1,11 @@
+# Gitignore for Astro project
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+.DS_Store
+
+.vscode/
+*.log
+.astro/

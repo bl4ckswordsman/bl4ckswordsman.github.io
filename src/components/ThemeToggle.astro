@@ -1,0 +1,73 @@
+---
+// ═══════════════════════════════════════════════════════
+//  ThemeToggle — Light / Dark / System
+// ═══════════════════════════════════════════════════════
+import type { Locale } from '@/i18n/locales';
+import { useTranslations } from '@/i18n/i18n';
+
+interface Props { lang: Locale; }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+<button
+  id="theme-toggle"
+  class="theme-toggle"
+  type="button"
+  aria-label={t('a11y', 'toggle_theme')}
+  title={t('a11y', 'toggle_theme')}
+>
+  <!-- Sun icon (light mode indicator) -->
+  <svg class="theme-icon theme-icon--light" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+    <circle cx="12" cy="12" r="5"/>
+    <line x1="12" y1="1" x2="12" y2="3"/>
+    <line x1="12" y1="21" x2="12" y2="23"/>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+    <line x1="1" y1="12" x2="3" y2="12"/>
+    <line x1="21" y1="12" x2="23" y2="12"/>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+  </svg>
+  <!-- Moon icon (dark mode indicator) -->
+  <svg class="theme-icon theme-icon--dark" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/>
+  </svg>
+  <span class="theme-label" aria-live="polite"></span>
+</button>
+
+<style>
+  [data-theme="light"] .theme-icon--dark  { display: none; }
+  [data-theme="dark"]  .theme-icon--light { display: none; }
+</style>
+
+<script>
+  const btn = document.getElementById('theme-toggle')!;
+  const root = document.documentElement;
+  const label = btn.querySelector<HTMLElement>('.theme-label')!;
+
+  function applyTheme(theme: 'light' | 'dark') {
+    root.dataset.theme = theme;
+    localStorage.setItem('theme', theme);
+    label.textContent = theme.charAt(0).toUpperCase() + theme.slice(1);
+  }
+
+  function toggleTheme() {
+    const current = root.dataset.theme === 'dark' ? 'dark' : 'light';
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  }
+
+  // Initialise label
+  const stored = localStorage.getItem('theme');
+  const sys = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  const active = (stored ?? sys) as 'light' | 'dark';
+  applyTheme(active);
+
+  btn.addEventListener('click', toggleTheme);
+
+  // Sync across tabs
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'theme' && e.newValue) {
+      applyTheme(e.newValue as 'light' | 'dark');
+    }
+  });
+</script>

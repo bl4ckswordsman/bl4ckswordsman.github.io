@@ -1,0 +1,103 @@
+---
+// ═══════════════════════════════════════════════════════
+//  LocaleSwitcher — Language picker
+//  Uses a details/summary for CSS-only toggling
+// ═══════════════════════════════════════════════════════
+import type { Locale } from '@/i18n/locales';
+import { SUPPORTED_LOCALES, LOCALE_META, getLocalePath } from '@/i18n/locales';
+import { useTranslations } from '@/i18n/i18n';
+
+interface Props {
+  lang: Locale;
+  page?: string;
+}
+
+const { lang, page = '' } = Astro.props;
+const t = useTranslations(lang);
+const currentMeta = LOCALE_META[lang];
+---
+<details class="locale-switcher" id="locale-switcher">
+  <summary
+    class="locale-switcher__toggle"
+    aria-label={t('a11y', 'change_language')}
+    title={t('a11y', 'change_language')}
+  >
+    <!-- Globe icon -->
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="2" y1="12" x2="22" y2="12"/>
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+    </svg>
+    <span>{currentMeta.nativeName}</span>
+  </summary>
+
+  <div class="locale-switcher__menu" role="menu" aria-label={t('a11y', 'change_language')}>
+    {SUPPORTED_LOCALES.map((locale) => {
+      const meta = LOCALE_META[locale];
+      const href = getLocalePath(locale, page ? `/${page}` : '/');
+      return (
+        <a
+          href={href}
+          class="locale-switcher__item"
+          role="menuitem"
+          lang={meta.tag}
+          aria-current={locale === lang ? 'true' : undefined}
+          hreflang={meta.tag}
+        >
+          <span aria-hidden="true">{meta.nativeName}</span>
+          {locale === lang && (
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+          )}
+        </a>
+      );
+    })}
+  </div>
+</details>
+
+<style>
+  .locale-switcher {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .locale-switcher[open] > summary {
+    background: var(--hover-bg);
+  }
+
+  .locale-switcher__menu {
+    position: absolute;
+    inset-block-start: calc(100% + var(--space-xs));
+    inset-inline-end: 0;
+    background: var(--bg-surface);
+    border: var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    padding: var(--space-xs);
+    display: grid;
+    min-inline-size: 160px;
+    z-index: 200;
+  }
+
+  summary { list-style: none; }
+  summary::-webkit-details-marker { display: none; }
+</style>
+
+<script>
+  // Close dropdown on outside click
+  document.addEventListener('click', (e) => {
+    const switcher = document.getElementById('locale-switcher') as HTMLDetailsElement | null;
+    if (switcher && !switcher.contains(e.target as Node)) {
+      switcher.open = false;
+    }
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const switcher = document.getElementById('locale-switcher') as HTMLDetailsElement | null;
+      if (switcher) switcher.open = false;
+    }
+  });
+</script>

@@ -1,0 +1,55 @@
+---
+// ═══════════════════════════════════════════════════════
+//  NavBar — Sticky navigation header
+// ═══════════════════════════════════════════════════════
+import type { Locale } from '@/i18n/locales';
+import { getLocalePath } from '@/i18n/locales';
+import { useTranslations } from '@/i18n/i18n';
+import LocaleSwitcher from './LocaleSwitcher.astro';
+import ThemeToggle from './ThemeToggle.astro';
+
+interface Props {
+  lang: Locale;
+  page?: string;
+}
+
+const { lang, page = '' } = Astro.props;
+const t = useTranslations(lang);
+
+const navLinks = [
+  { key: 'home',      slug: '',        label: t('nav', 'home') },
+  { key: 'resume',    slug: 'resume',  label: t('nav', 'resume') },
+  { key: 'projects',  slug: 'projects', label: t('nav', 'projects') },
+  { key: 'guestbook', slug: 'guestbook', label: t('nav', 'guestbook') },
+] as const;
+---
+<header class="header" role="banner">
+  <div class="container header__inner">
+
+    <a
+      href={getLocalePath(lang, '/')}
+      class="header__brand"
+      aria-label="bl4ckswordsman — home"
+    >
+      bl4ckswordsman
+    </a>
+
+    <nav class="header__nav" aria-label="Primary navigation">
+      {navLinks.map(({ slug, label }) => (
+        <a
+          href={getLocalePath(lang, slug ? `/${slug}` : '/')}
+          class="nav-link"
+          aria-current={page === slug ? 'page' : undefined}
+        >
+          {label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="header__controls" style="display:flex;gap:var(--space-xs);align-items:center;">
+      <ThemeToggle lang={lang} />
+      <LocaleSwitcher lang={lang} page={page} />
+    </div>
+
+  </div>
+</header>

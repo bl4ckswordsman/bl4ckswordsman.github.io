@@ -1,0 +1,109 @@
+---
+// ═══════════════════════════════════════════════════════
+//  GiscusComments — GitHub Discussions embed
+//  Uses giscus.app — lightweight, privacy-respecting
+//  Setup: https://giscus.app — enable GitHub Discussions
+//  on your repo, then fill in the config below.
+// ═══════════════════════════════════════════════════════
+import type { Locale } from '@/i18n/locales';
+import { LOCALE_META } from '@/i18n/locales';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const tag = LOCALE_META[lang].tag;
+
+// ── Giscus configuration ──────────────────────────────
+// Visit https://giscus.app to get these values for your repo.
+// Requires: GitHub Discussions enabled on the repo.
+const GISCUS_REPO        = 'bl4ckswordsman/bl4ckswordsman.github.io';
+const GISCUS_REPO_ID     = '';   // ← fill in from giscus.app
+const GISCUS_CATEGORY    = 'Guestbook';
+const GISCUS_CATEGORY_ID = '';   // ← fill in from giscus.app
+const GISCUS_MAPPING     = 'pathname';
+const GISCUS_REACTIONS   = '1';
+
+// Map our locales to giscus-supported lang codes
+// See: https://github.com/giscus/giscus/blob/main/CONTRIBUTING.md#adding-localizations
+const GISCUS_LANG: Record<string, string> = {
+  en: 'en',
+  sv: 'sv',
+  no: 'nb',   // giscus uses Norwegian Bokmål (nb)
+  da: 'da',
+  fi: 'fi',
+  it: 'it',
+  zh: 'zh-CN',
+  ja: 'ja',
+};
+const giscusLang = GISCUS_LANG[lang] ?? 'en';
+---
+<div
+  class="guestbook-wrap"
+  id="giscus-container"
+  data-theme-light="light"
+  data-theme-dark="dark"
+>
+  {GISCUS_REPO_ID ? (
+    <script
+      is:inline
+      src="https://giscus.app/client.js"
+      data-repo={GISCUS_REPO}
+      data-repo-id={GISCUS_REPO_ID}
+      data-category={GISCUS_CATEGORY}
+      data-category-id={GISCUS_CATEGORY_ID}
+      data-mapping={GISCUS_MAPPING}
+      data-strict="0"
+      data-reactions-enabled={GISCUS_REACTIONS}
+      data-emit-metadata="0"
+      data-input-position="top"
+      data-theme="preferred_color_scheme"
+      data-lang={giscusLang}
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async
+    />
+  ) : (
+    <div class="empty-state">
+      <div class="empty-state__icon">💬</div>
+      <h2>Giscus not yet configured</h2>
+      <p>
+        Visit <a href="https://giscus.app" target="_blank" rel="noopener noreferrer">giscus.app</a>,
+        authorise the app for this repo, then fill in
+        <code>GISCUS_REPO_ID</code> and <code>GISCUS_CATEGORY_ID</code> in
+        <code>src/components/GiscusComments.astro</code>.
+      </p>
+    </div>
+  )}
+</div>
+
+<script>
+  // Sync giscus iframe theme with site theme toggle
+  function sendGiscusTheme(theme: string) {
+    const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame');
+    if (!iframe) return;
+    iframe.contentWindow?.postMessage(
+      { giscus: { setConfig: { theme } } },
+      'https://giscus.app'
+    );
+  }
+
+  // Watch for theme changes on the root element
+  const observer = new MutationObserver(() => {
+    const dark = document.documentElement.dataset.theme === 'dark';
+    sendGiscusTheme(dark ? 'dark' : 'light');
+  });
+
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme'],
+  });
+
+  // Initial sync once giscus has loaded
+  window.addEventListener('message', (e) => {
+    if (e.origin !== 'https://giscus.app') return;
+    const dark = document.documentElement.dataset.theme === 'dark';
+    sendGiscusTheme(dark ? 'dark' : 'light');
+  }, { once: true });
+</script>

@@ -1,0 +1,107 @@
+---
+// ═══════════════════════════════════════════════════════
+//  Layout — Base HTML Shell
+//  Handles: lang attr, meta tags, theme, skip-link
+// ═══════════════════════════════════════════════════════
+import type { Locale } from '@/i18n/locales';
+import '@/styles/design-system.css';
+import { LOCALE_META, SUPPORTED_LOCALES, getLocalePath } from '@/i18n/locales';
+import { useTranslations } from '@/i18n/i18n';
+import NavBar from '@/components/NavBar.astro';
+
+interface Props {
+  lang: Locale;
+  title: string;
+  description: string;
+  /** Current page slug (e.g. 'portfolio', 'projects') */
+  page?: string;
+}
+
+const { lang, title, description, page = '' } = Astro.props;
+const t = useTranslations(lang);
+const meta = LOCALE_META[lang];
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+
+// Build alternate hreflang links for SEO
+const alternates = SUPPORTED_LOCALES.map((locale) => ({
+  locale,
+  href: new URL(getLocalePath(locale, page ? `/${page}` : '/'), Astro.site).href,
+}));
+---
+<!doctype html>
+<html lang={meta.tag} dir={meta.dir} data-theme="system">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <meta name="generator" content={Astro.generator} />
+
+  <!-- SEO canonical + alternates -->
+  <link rel="canonical" href={canonicalUrl.href} />
+  {alternates.map(({ locale, href }) => (
+    <link rel="alternate" hreflang={LOCALE_META[locale].tag} href={href} />
+  ))}
+  <link rel="alternate" hreflang="x-default" href={new URL('/', Astro.site).href} />
+
+  <!-- Open Graph -->
+  <meta property="og:title"       content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url"         content={canonicalUrl.href} />
+  <meta property="og:type"        content="website" />
+  <meta property="og:site_name"   content="bl4ckswordsman" />
+
+  <!-- Twitter/X card -->
+  <meta name="twitter:card"        content="summary" />
+  <meta name="twitter:title"       content={title} />
+  <meta name="twitter:description" content={description} />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="theme-color" content="#00E5FF" />
+
+  <!-- Preconnect for Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <title>{title}</title>
+</head>
+<body>
+  <!-- Accessibility: skip to main content -->
+  <a class="skip-link" href="#main-content">
+    {t('a11y', 'skip_to_content')}
+  </a>
+
+  <NavBar lang={lang} page={page} />
+
+  <main id="main-content">
+    <slot />
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>
+        {t('footer', 'built_with')} ·
+        <a
+          href="https://github.com/bl4ckswordsman/bl4ckswordsman.github.io"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {t('footer', 'source')}
+        </a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Theme toggle script: runs before paint to prevent flash -->
+  <script is:inline>
+    (function () {
+      const stored = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme = stored ?? (prefersDark ? 'dark' : 'light');
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+</body>
+</html>
+
+

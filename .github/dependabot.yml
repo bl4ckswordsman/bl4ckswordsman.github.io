@@ -1,0 +1,14 @@
+# Dependabot configuration
+version: 2
+updates:
+  # Astro + bun ecosystem
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5
+    groups:
+      astro:
+        patterns:
+          - "astro"
+          - "@astrojs/*"

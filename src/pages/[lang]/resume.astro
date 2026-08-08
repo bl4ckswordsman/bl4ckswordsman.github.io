@@ -1,0 +1,396 @@
+---
+// ═══════════════════════════════════════════════════════
+//  Résumé page — powered by Reactive Resume (rxresu.me)
+//  Fetches the public JSON export at build time.
+//  Static output: no client-side API calls needed.
+// ═══════════════════════════════════════════════════════
+import type { Locale } from '@/i18n/locales';
+import { SUPPORTED_LOCALES } from '@/i18n/locales';
+import { useTranslations } from '@/i18n/i18n';
+import Layout from '@/layouts/Layout.astro';
+import { portfolio } from '@/data/portfolio'; // used for socials / fallback
+
+export function getStaticPaths() {
+  return SUPPORTED_LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Locale };
+const t = useTranslations(lang);
+
+// ── Reactive Resume public share URL ────────────────────
+// Set your public share username/slug from rxresu.me.
+// Format: https://rxresu.me/<username>/r/<resume-slug>
+// To get the JSON: https://rxresu.me/api/resume/public/<username>/<slug>
+//
+// Leave RXRESUME_USERNAME empty to show the fallback (static data).
+const RXRESUME_USERNAME = ''; // ← fill in e.g. 'bl4ckswordsman'
+const RXRESUME_SLUG     = ''; // ← fill in e.g. 'main'
+
+type ResumeSection = {
+  name: string;
+  items: Array<{
+    id: string;
+    visible: boolean;
+    title?: string;
+    subtitle?: string;
+    date?: string;
+    description?: string;
+    summary?: string;
+    keywords?: string[];
+    url?: { href?: string };
+    location?: string;
+    level?: string;
+  }>;
+};
+
+interface RxResumeData {
+  basics?: {
+    name?: string;
+    headline?: string;
+    email?: string;
+    phone?: string;
+    location?: string;
+    url?: { href?: string };
+    summary?: string;
+    photo?: { url?: string };
+  };
+  sections?: Record<string, ResumeSection>;
+  metadata?: {
+    updatedAt?: string;
+  };
+}
+
+let rxData: RxResumeData | null = null;
+let rxError = false;
+let lastUpdated = '';
+
+if (RXRESUME_USERNAME && RXRESUME_SLUG) {
+  try {
+    const res = await fetch(
+      `https://rxresu.me/api/resume/public/${RXRESUME_USERNAME}/${RXRESUME_SLUG}`,
+      { headers: { Accept: 'application/json' } }
+    );
+    if (res.ok) {
+      rxData = await res.json();
+      lastUpdated = rxData?.metadata?.updatedAt
+        ? new Intl.DateTimeFormat(lang, { dateStyle: 'medium' }).format(
+            new Date(rxData.metadata.updatedAt)
+          )
+        : '';
+    } else {
+      rxError = true;
+    }
+  } catch {
+    rxError = true;
+  }
+}
+
+// Use rxresume data if available, otherwise fall back to static portfolio data
+const name     = rxData?.basics?.name     ?? 'Amarildo';
+const headline = rxData?.basics?.headline ?? t('hero', 'tagline');
+const email    = rxData?.basics?.email    ?? portfolio.email ?? '';
+const summary  = rxData?.basics?.summary  ?? '';
+
+// Extract sections from rxresume JSON (fallback to static)
+function getSection(id: string): ResumeSection['items'] {
+  return (rxData?.sections?.[id]?.items ?? []).filter((i) => i.visible !== false);
+}
+
+const experience = getSection('experience').length ? getSection('experience') : null;
+const education  = getSection('education').length  ? getSection('education')  : null;
+const skills     = getSection('skills').length     ? getSection('skills')     : null;
+const languages  = getSection('languages').length  ? getSection('languages')  : null;
+
+// Fallback to static data when rxresume is not configured
+const useStatic = !rxData;
+---
+<Layout
+  lang={lang}
+  title={`bl4ckswordsman | ${t('resume', 'title')}`}
+  description={headline}
+  page="resume"
+>
+  <div class="container page-section">
+
+    <!-- Header -->
+    <div class="resume-header scroll-reveal">
+      <div class="resume-header__text">
+        <h1>{name}</h1>
+        {headline && <p class="resume-header__headline">{headline}</p>}
+        {summary  && <p class="resume-header__summary">{summary}</p>}
+      </div>
+
+      <div class="resume-header__actions">
+        {RXRESUME_USERNAME && RXRESUME_SLUG && (
+          <a
+            href={`https://rxresu.me/${RXRESUME_USERNAME}/r/${RXRESUME_SLUG}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn--primary"
+          >
+            {t('resume', 'view_original')} ↗
+          </a>
+        )}
+        {portfolio.socials.map((s) => (
+          <a href={s.url} target="_blank" rel="noopener noreferrer" class="btn btn--outline" aria-label={s.label}>
+            {s.iconPath && (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d={s.iconPath} />
+              </svg>
+            )}
+            {s.platform}
+          </a>
+        ))}
+        {email && (
+          <a href={`mailto:${email}`} class="btn btn--outline">✉ {t('resume', 'contact')}</a>
+        )}
+      </div>
+
+      {lastUpdated && (
+        <p class="resume-header__updated">
+          <span class="tag">{t('resume', 'present')} · {lastUpdated}</span>
+        </p>
+      )}
+    </div>
+
+    {/* ── Reactive Resume data ── */}
+    {rxData ? (
+      <>
+        {/* Skills from rxresume */}
+        {skills && (
+          <section class="page-section scroll-reveal" aria-labelledby="skills-heading">
+            <h2 id="skills-heading" class="section-heading">{t('resume', 'skills')}</h2>
+            <div class="skills-grid">
+              {skills.map((s) => (
+                <span class="tag">
+                  {s.title}
+                  {s.level && <span class="skill-level"> · {s.level}</span>}
+                </span>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Experience from rxresume */}
+        {experience && (
+          <section class="page-section scroll-reveal" aria-labelledby="exp-heading">
+            <h2 id="exp-heading" class="section-heading">{t('resume', 'experience')}</h2>
+            <div class="timeline-list">
+              {experience.map((e) => (
+                <details class="timeline-item">
+                  <summary>
+                    <div>
+                      <div class="timeline-item__title">{e.title}</div>
+                      {e.subtitle && <div class="timeline-item__meta">{e.subtitle}{e.location ? ` · ${e.location}` : ''}</div>}
+                    </div>
+                    {e.date && <span class="tag" style="flex-shrink:0">{e.date}</span>}
+                  </summary>
+                  {(e.summary || e.description || e.keywords?.length) && (
+                    <div class="timeline-item__body">
+                      {(e.summary || e.description) && <p>{e.summary ?? e.description}</p>}
+                      {e.keywords?.length && (
+                        <div class="skills-grid" style="margin-block-start:var(--space-sm)">
+                          {e.keywords.map((k) => <span class="tag">{k}</span>)}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </details>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Education from rxresume */}
+        {education && (
+          <section class="page-section scroll-reveal" aria-labelledby="edu-heading">
+            <h2 id="edu-heading" class="section-heading">{t('resume', 'education')}</h2>
+            <div class="timeline-list">
+              {education.map((e) => (
+                <details class="timeline-item">
+                  <summary>
+                    <div>
+                      <div class="timeline-item__title">{e.title}</div>
+                      {e.subtitle && <div class="timeline-item__meta">{e.subtitle}</div>}
+                    </div>
+                    {e.date && <span class="tag" style="flex-shrink:0">{e.date}</span>}
+                  </summary>
+                  {(e.summary || e.description) && (
+                    <div class="timeline-item__body">
+                      <p>{e.summary ?? e.description}</p>
+                    </div>
+                  )}
+                </details>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Languages from rxresume */}
+        {languages && (
+          <section class="page-section scroll-reveal" aria-labelledby="langs-heading">
+            <h2 id="langs-heading" class="section-heading">{t('resume', 'languages')}</h2>
+            <div class="lang-list">
+              {languages.map((l) => (
+                <div class="lang-item">
+                  <span class="lang-item__name">{l.title}</span>
+                  {l.level && <span class={`lang-badge lang-badge--${l.level.toLowerCase()}`}>{l.level}</span>}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+      </>
+    ) : useStatic ? (
+      <>
+        {/* Fallback: static portfolio data */}
+        <div class="setup-notice scroll-reveal">
+          <p>
+            <strong>Reactive Resume not configured.</strong><br />
+            Set <code>RXRESUME_USERNAME</code> and <code>RXRESUME_SLUG</code> in
+            <code>src/pages/[lang]/resume.astro</code> to pull live data from
+            <a href="https://rxresu.me" target="_blank" rel="noopener noreferrer">rxresu.me</a>.
+            <br />Below is the static fallback from <code>src/data/portfolio.ts</code>.
+          </p>
+        </div>
+
+        <section class="page-section scroll-reveal" aria-labelledby="skills-heading">
+          <h2 id="skills-heading" class="section-heading">{t('resume', 'skills')}</h2>
+          <div class="skills-grid">
+            {portfolio.skills.map((s) => (
+              <span class={`tag tag--${s.category}`}>{s.name}</span>
+            ))}
+          </div>
+        </section>
+
+        <section class="page-section scroll-reveal" aria-labelledby="exp-heading">
+          <h2 id="exp-heading" class="section-heading">{t('resume', 'experience')}</h2>
+          <div class="timeline-list">
+            {portfolio.experience.map((e) => (
+              <details class="timeline-item">
+                <summary>
+                  <div>
+                    <div class="timeline-item__title">{e.title}</div>
+                    <div class="timeline-item__meta">{e.organisation}</div>
+                  </div>
+                  <span class="tag" style="flex-shrink:0">
+                    {e.startDate} — {e.endDate ?? t('resume', 'present')}
+                  </span>
+                </summary>
+                {e.highlights?.length && (
+                  <div class="timeline-item__body">
+                    <ul class="timeline-item__highlights">
+                      {e.highlights.map((h) => <li>{h}</li>)}
+                    </ul>
+                  </div>
+                )}
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <section class="page-section scroll-reveal" aria-labelledby="edu-heading">
+          <h2 id="edu-heading" class="section-heading">{t('resume', 'education')}</h2>
+          <div class="timeline-list">
+            {portfolio.education.map((e) => (
+              <details class="timeline-item">
+                <summary>
+                  <div>
+                    <div class="timeline-item__title">{e.title}</div>
+                    <div class="timeline-item__meta">{e.organisation}</div>
+                  </div>
+                  <span class="tag" style="flex-shrink:0">
+                    {e.startDate} — {e.endDate ?? t('resume', 'present')}
+                  </span>
+                </summary>
+                {e.highlights?.length && (
+                  <div class="timeline-item__body">
+                    <ul class="timeline-item__highlights">
+                      {e.highlights.map((h) => <li>{h}</li>)}
+                    </ul>
+                  </div>
+                )}
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <section class="page-section scroll-reveal" aria-labelledby="langs-heading">
+          <h2 id="langs-heading" class="section-heading">{t('resume', 'languages')}</h2>
+          <div class="lang-list">
+            {portfolio.spokenLanguages.map((l) => (
+              <div class="lang-item">
+                <span class="lang-item__name">{l.name}</span>
+                <span class={`lang-badge lang-badge--${l.level}`}>{l.level}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+      </>
+    ) : (
+      <div class="empty-state">
+        <div class="empty-state__icon">⚠️</div>
+        <h2>Résumé unavailable</h2>
+        <p>Could not load résumé data from Reactive Resume. Try again later.</p>
+      </div>
+    )}
+  </div>
+</Layout>
+
+<style>
+  .resume-header {
+    margin-block-end: var(--space-2xl);
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .resume-header__headline {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--accent-cyan);
+    font-weight: 500;
+    margin-block-start: var(--space-xs);
+  }
+
+  .resume-header__summary {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    max-inline-size: 70ch;
+    margin-block-start: var(--space-sm);
+  }
+
+  .resume-header__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+
+  .resume-header__updated {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+  }
+
+  .timeline-item__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1rem;
+  }
+
+  .skill-level {
+    font-weight: 400;
+    opacity: 0.7;
+  }
+
+  .lang-list { max-inline-size: 600px; }
+
+  .setup-notice {
+    background: color-mix(in srgb, var(--accent-yellow) 12%, transparent);
+    border: var(--border-thin);
+    border-color: var(--score-medium);
+    border-radius: var(--radius);
+    padding: var(--space-md) var(--space-lg);
+    font-size: 0.88rem;
+    margin-block-end: var(--space-xl);
+    line-height: 1.7;
+  }
+</style>

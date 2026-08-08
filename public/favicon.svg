@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00E5FF"/>
+      <stop offset="100%" stop-color="#B388FF"/>
+    </linearGradient>
+  </defs>
+  <!-- Sword icon (stylised) -->
+  <rect x="46" y="10" width="8" height="60" rx="3" fill="url(#g)"/>
+  <rect x="20" y="45" width="60" height="10" rx="3" fill="url(#g)"/>
+  <polygon points="50,70 44,90 56,90" fill="url(#g)"/>
+</svg>

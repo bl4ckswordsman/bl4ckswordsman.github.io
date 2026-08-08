@@ -1,0 +1,198 @@
+---
+// ═══════════════════════════════════════════════════════
+//  Projects page — GitHub repos fetched at build time
+//  No client-side API calls; data baked into HTML
+// ═══════════════════════════════════════════════════════
+import type { Locale } from '@/i18n/locales';
+import { SUPPORTED_LOCALES } from '@/i18n/locales';
+import { useTranslations } from '@/i18n/i18n';
+import Layout from '@/layouts/Layout.astro';
+import type { GitHubRepo } from '@/data/types';
+
+export function getStaticPaths() {
+  return SUPPORTED_LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Locale };
+const t = useTranslations(lang);
+
+// ── Fetch repos at build time ─────────────────────────
+const GITHUB_USERNAME = 'bl4ckswordsman';
+let repos: GitHubRepo[] = [];
+
+try {
+  const res = await fetch(
+    `https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100&sort=pushed&type=owner`,
+    {
+      headers: {
+        'Accept': 'application/vnd.github.v3+json',
+        // GITHUB_TOKEN is optional — increases rate limit from 60 to 5000/hr
+        ...(import.meta.env.GITHUB_TOKEN
+          ? { Authorization: `Bearer ${import.meta.env.GITHUB_TOKEN}` }
+          : {}),
+      },
+    }
+  );
+  if (res.ok) {
+    const all: GitHubRepo[] = await res.json();
+    repos = all
+      .filter((r) => !r.fork && !r.archived)
+      .sort((a, b) => b.stargazers_count - a.stargazers_count);
+  }
+} catch {
+  // Build continues with empty repos; page shows empty state
+}
+
+// Derive language dot class
+function langDotClass(lang: string | null): string {
+  if (!lang) return '';
+  return `lang-dot--${lang.toLowerCase().replace(/\s+/g, '-').replace(/\+/g, 'p')}`;
+}
+
+// Relative time formatter
+const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
+function relativeDate(iso: string): string {
+  const diff = (new Date(iso).getTime() - Date.now()) / 1000;
+  const abs = Math.abs(diff);
+  if (abs < 3600)   return rtf.format(Math.round(diff / 60), 'minute');
+  if (abs < 86400)  return rtf.format(Math.round(diff / 3600), 'hour');
+  if (abs < 604800) return rtf.format(Math.round(diff / 86400), 'day');
+  if (abs < 2592000)return rtf.format(Math.round(diff / 604800), 'week');
+  return rtf.format(Math.round(diff / 2592000), 'month');
+}
+---
+<Layout
+  lang={lang}
+  title={`bl4ckswordsman | ${t('projects', 'title')}`}
+  description={t('projects', 'subtitle')}
+  page="projects"
+>
+  <div class="container page-section">
+    <div class="scroll-reveal">
+      <h1>{t('projects', 'title')}</h1>
+      <p class="subtitle">{t('projects', 'subtitle')}</p>
+    </div>
+
+    {repos.length > 0 ? (
+      <>
+        <!-- Client-side text filter (minimal JS) -->
+        <div class="projects-filter scroll-reveal">
+          <input
+            id="project-filter"
+            type="search"
+            class="projects-filter__input"
+            placeholder={t('projects', 'filter_placeholder')}
+            aria-label={t('projects', 'filter_placeholder')}
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="projects-grid" id="projects-grid">
+          {repos.map((repo) => (
+            <a
+              href={repo.html_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="project-card scroll-reveal"
+              data-name={repo.name.toLowerCase()}
+              data-desc={(repo.description ?? '').toLowerCase()}
+              data-topics={repo.topics.join(' ').toLowerCase()}
+              aria-label={`${repo.name} — ${t('a11y', 'external_link')}`}
+            >
+              <div class="project-card__name">{repo.name}</div>
+
+              {repo.description && (
+                <p class="project-card__desc">{repo.description}</p>
+              )}
+
+              {repo.topics.length > 0 && (
+                <div class="project-card__topics">
+                  {repo.topics.slice(0, 4).map((topic) => (
+                    <span class="tag">{topic}</span>
+                  ))}
+                </div>
+              )}
+
+              <div class="project-card__meta">
+                {repo.language && (
+                  <span class="project-card__stat">
+                    <span
+                      class={`project-card__lang-dot ${langDotClass(repo.language)}`}
+                      aria-hidden="true"
+                    />
+                    {repo.language}
+                  </span>
+                )}
+                <span class="project-card__stat" title={t('projects', 'stars')}>
+                  ★ {repo.stargazers_count}
+                </span>
+                {repo.forks_count > 0 && (
+                  <span class="project-card__stat" title={t('projects', 'forks')}>
+                    ⑂ {repo.forks_count}
+                  </span>
+                )}
+                <span class="project-card__stat" title={t('projects', 'updated')}>
+                  {relativeDate(repo.pushed_at)}
+                </span>
+              </div>
+            </a>
+          ))}
+        </div>
+
+        <p id="no-results" class="empty-state" style="display:none;" aria-live="polite">
+          <span class="empty-state__icon">🔍</span>
+          {t('projects', 'no_results')}
+        </p>
+      </>
+    ) : (
+      <div class="empty-state">
+        <div class="empty-state__icon">📂</div>
+        <h2>No projects loaded</h2>
+        <p>GitHub API was unavailable at build time. Projects will appear on next deploy.</p>
+      </div>
+    )}
+  </div>
+</Layout>
+
+<style>
+  .subtitle {
+    color: var(--text-secondary);
+    margin-block-start: var(--space-xs);
+    margin-block-end: var(--space-xl);
+  }
+
+  .project-card__topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+</style>
+
+<script>
+  const filterInput = document.getElementById('project-filter') as HTMLInputElement | null;
+  const grid = document.getElementById('projects-grid');
+  const noResults = document.getElementById('no-results');
+
+  if (filterInput && grid) {
+    filterInput.addEventListener('input', () => {
+      const query = filterInput.value.toLowerCase().trim();
+      let visible = 0;
+
+      grid.querySelectorAll<HTMLAnchorElement>('.project-card').forEach((card) => {
+        const searchable = [
+          card.dataset.name ?? '',
+          card.dataset.desc ?? '',
+          card.dataset.topics ?? '',
+        ].join(' ');
+
+        const matches = !query || searchable.includes(query);
+        card.style.display = matches ? '' : 'none';
+        if (matches) visible++;
+      });
+
+      if (noResults) {
+        noResults.style.display = visible === 0 ? 'block' : 'none';
+      }
+    });
+  }
+</script>
