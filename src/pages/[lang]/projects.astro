@@ -64,8 +64,8 @@ function langDotClass(lang: string | null): string {
 }
 
 // Relative time formatter
-const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
-function relativeDate(iso: string): string {
+function relativeDate(iso: string, locale: string = 'en'): string {
+  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
   const diff = (new Date(iso).getTime() - Date.now()) / 1000;
   const abs = Math.abs(diff);
   if (abs < 3600)   return rtf.format(Math.round(diff / 60), 'minute');
@@ -149,7 +149,7 @@ function relativeDate(iso: string): string {
                   </span>
                 )}
                 <span class="project-card__stat" title={t('projects', 'updated')}>
-                  {relativeDate(repo.pushed_at)}
+                  {relativeDate(repo.pushed_at, lang)}
                 </span>
               </div>
             </a>

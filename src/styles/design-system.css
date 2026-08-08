@@ -541,6 +541,12 @@
     gap: var(--space-2xs);
   }
 
+  .project-card__stat + .project-card__stat::before {
+    content: "·";
+    margin-inline-end: var(--space-2xs);
+    opacity: 0.5;
+  }
+
   .project-card__lang-dot {
     inline-size: 10px;
     block-size: 10px;
