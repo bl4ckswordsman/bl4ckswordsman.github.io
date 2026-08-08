@@ -17,14 +17,14 @@ export const portfolio: Portfolio = {
   socials: [
     {
       platform: 'GitHub',
-      url:      'https://github.com/bl4ckswordsman',
-      label:    'GitHub profile',
+      url: 'https://github.com/bl4ckswordsman',
+      label: 'GitHub profile',
       iconPath: GITHUB_ICON,
     },
     {
       platform: 'LinkedIn',
-      url:      'https://linkedin.com/in/bl4ckswordsman',
-      label:    'LinkedIn profile',
+      url: 'https://linkedin.com/in/amarildo-r-623b86198',
+      label: 'LinkedIn profile',
       iconPath: LINKEDIN_ICON,
     },
   ],
@@ -32,39 +32,17 @@ export const portfolio: Portfolio = {
   // ── Skills ─────────────────────────────────────────
   skills: [
     // Languages
-    { name: 'TypeScript', category: 'language' },
-    { name: 'Python',     category: 'language' },
-    { name: 'Rust',       category: 'language' },
-    { name: 'Go',         category: 'language' },
-    { name: 'SQL',        category: 'language' },
-    // Frameworks / Libraries
-    { name: 'Astro',       category: 'framework' },
-    { name: 'React',       category: 'framework' },
-    { name: 'Node.js',     category: 'framework' },
-    { name: 'Hono',        category: 'framework' },
-    // Tools
-    { name: 'Git',         category: 'tool' },
-    { name: 'Docker',      category: 'tool' },
-    { name: 'Bun',         category: 'tool' },
-    { name: 'GitHub Actions', category: 'tool' },
-    // Platforms
-    { name: 'Linux',       category: 'platform' },
-    { name: 'GitHub Pages', category: 'platform' },
-    // Databases
-    { name: 'PostgreSQL',  category: 'database' },
-    { name: 'SQLite',      category: 'database' },
+    { name: 'C++', category: 'language' },
   ],
 
   // ── Experience ─────────────────────────────────────
   experience: [
     {
-      title:        'Software Developer',
+      title: 'Software Developer',
       organisation: 'Personal Projects',
-      startDate:    '2020',
+      startDate: '2020',
       highlights: [
-        'Built open-source tools in TypeScript, Python, and Rust',
-        'Designed and shipped full-stack web applications',
-        'Automated workflows with GitHub Actions',
+        'Built open-source tools',
       ],
     },
   ],
@@ -72,12 +50,11 @@ export const portfolio: Portfolio = {
   // ── Education ──────────────────────────────────────
   education: [
     {
-      title:        'Computer Science',
+      title: 'Computer Science',
       organisation: 'University',
-      startDate:    '2018',
-      endDate:      '2022',
+      startDate: '2018',
+      endDate: '2022',
       highlights: [
-        'Graduated with honours',
         'Focused on systems programming and distributed computing',
       ],
     },
@@ -85,10 +62,6 @@ export const portfolio: Portfolio = {
 
   // ── Spoken languages ───────────────────────────────
   spokenLanguages: [
-    { name: 'English',  level: 'fluent'   },
-    { name: 'Swedish',  level: 'native'   },
-    { name: 'Italian',  level: 'native'   },
-    { name: 'Norwegian', level: 'conversational' },
-    { name: 'Danish',   level: 'conversational' },
+    { name: 'English', level: 'fluent' },
   ],
 };
