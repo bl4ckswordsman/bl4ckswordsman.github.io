@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════
 //  i18n — Translation Helper
 //  Usage: const t = useTranslations(lang);
-//         t('nav.home') → "Home" | "Hem" | …
+//         t('nav', 'home') → "Home" | "Hem" | …
 // ═══════════════════════════════════════════════════════
 import type { Locale } from './locales';
 import en from './en';
@@ -13,7 +13,12 @@ import it from './it';
 import zh from './zh';
 import ja from './ja';
 
-type Translations = typeof en;
+// Define abstract dictionary structure matching English keys with string values
+export type DeepStringObject<T> = {
+  [K in keyof T]: T[K] extends string ? string : DeepStringObject<T[K]>;
+};
+
+export type Translations = DeepStringObject<typeof en>;
 
 const translations: Record<Locale, Translations> = { en, sv, no, da, fi, it, zh, ja };
 
@@ -36,5 +41,3 @@ export function useTranslations(locale: Locale) {
     return sectionDict[key as string] ?? fallback ?? `${String(section)}.${String(key)}`;
   };
 }
-
-export type { Translations };

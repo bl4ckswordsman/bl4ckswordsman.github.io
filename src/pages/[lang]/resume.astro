@@ -61,7 +61,6 @@ interface RxResumeData {
 }
 
 let rxData: RxResumeData | null = null;
-let rxError = false;
 let lastUpdated = '';
 
 if (RXRESUME_USERNAME && RXRESUME_SLUG) {
@@ -77,11 +76,9 @@ if (RXRESUME_USERNAME && RXRESUME_SLUG) {
             new Date(rxData.metadata.updatedAt)
           )
         : '';
-    } else {
-      rxError = true;
     }
   } catch {
-    rxError = true;
+    // Falls back to static data below
   }
 }
 

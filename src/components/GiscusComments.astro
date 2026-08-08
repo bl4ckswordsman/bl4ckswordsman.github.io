@@ -6,14 +6,12 @@
 //  on your repo, then fill in the config below.
 // ═══════════════════════════════════════════════════════
 import type { Locale } from '@/i18n/locales';
-import { LOCALE_META } from '@/i18n/locales';
 
 interface Props {
   lang: Locale;
 }
 
 const { lang } = Astro.props;
-const tag = LOCALE_META[lang].tag;
 
 // ── Giscus configuration ──────────────────────────────
 // Visit https://giscus.app to get these values for your repo.
