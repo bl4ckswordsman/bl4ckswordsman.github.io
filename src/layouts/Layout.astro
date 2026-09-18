@@ -8,6 +8,7 @@ import '@/styles/design-system.css';
 import { LOCALE_META, SUPPORTED_LOCALES, getLocalePath } from '@/i18n/locales';
 import { useTranslations } from '@/i18n/i18n';
 import NavBar from '@/components/NavBar.astro';
+import { portfolio } from '@/data/portfolio';
 
 interface Props {
   lang: Locale;
@@ -21,6 +22,27 @@ const { lang, title, description, page = '' } = Astro.props;
 const t = useTranslations(lang);
 const meta = LOCALE_META[lang];
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const ogImageUrl = new URL('/og-image.svg', Astro.site).href;
+const socialLinks = portfolio.socials.map((social) => social.url);
+const structuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'bl4ckswordsman',
+    url: new URL('/', Astro.site).href,
+    inLanguage: meta.tag,
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Amarildo',
+    alternateName: 'bl4ckswordsman',
+    url: canonicalUrl.href,
+    sameAs: socialLinks,
+    jobTitle: 'Software Developer',
+  },
+];
 
 // Build alternate hreflang links for SEO
 const alternates = SUPPORTED_LOCALES.map((locale) => ({
@@ -49,11 +71,22 @@ const alternates = SUPPORTED_LOCALES.map((locale) => ({
   <meta property="og:url"         content={canonicalUrl.href} />
   <meta property="og:type"        content="website" />
   <meta property="og:site_name"   content="bl4ckswordsman" />
+  <meta property="og:locale"      content={meta.tag.replace('-', '_')} />
+  <meta property="og:image"       content={ogImageUrl} />
+  <meta property="og:image:alt"   content={`${title} — personal website`} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
 
   <!-- Twitter/X card -->
-  <meta name="twitter:card"        content="summary" />
+  <meta name="twitter:card"        content="summary_large_image" />
   <meta name="twitter:title"       content={title} />
   <meta name="twitter:description" content={description} />
+  <meta name="twitter:image"       content={ogImageUrl} />
+  <meta name="twitter:image:alt"   content={`${title} — personal website`} />
+  <meta name="twitter:site"        content="@bl4ckswordsman" />
+  <meta name="twitter:creator"     content="@bl4ckswordsman" />
+
+  <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -103,5 +136,4 @@ const alternates = SUPPORTED_LOCALES.map((locale) => ({
   </script>
 </body>
 </html>
-
 

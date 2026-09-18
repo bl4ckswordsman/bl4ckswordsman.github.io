@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">bl4ckswordsman — Amarildo</title>
+  <desc id="desc">Personal software developer portfolio with projects and resume.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050b14" />
+      <stop offset="60%" stop-color="#0b1422" />
+      <stop offset="100%" stop-color="#111f35" />
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00E5FF" />
+      <stop offset="100%" stop-color="#70F0FF" />
+    </linearGradient>
+    <pattern id="grid" width="34" height="34" patternUnits="userSpaceOnUse">
+      <path d="M 34 0 L 0 0 0 34" fill="none" stroke="#ffffff" stroke-opacity="0.09" stroke-width="1" />
+    </pattern>
+    <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="16" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <rect width="1200" height="630" fill="url(#grid)" />
+
+  <circle cx="1000" cy="120" r="210" fill="#00E5FF" fill-opacity="0.12" filter="url(#softGlow)" />
+  <circle cx="210" cy="520" r="180" fill="#00E5FF" fill-opacity="0.1" filter="url(#softGlow)" />
+
+  <rect x="100" y="102" width="250" height="34" rx="17" fill="#0f2238" stroke="#00E5FF" stroke-opacity="0.45" />
+  <text x="125" y="124" fill="#89f7ff" font-size="18" font-family="'JetBrains Mono', 'Fira Code', monospace">Software Developer</text>
+
+  <text x="100" y="266" fill="#f6fbff" font-size="84" font-weight="700" font-family="'Space Grotesk', 'Inter', 'Segoe UI', sans-serif">
+    bl4ckswordsman
+  </text>
+  <text x="100" y="334" fill="#b7c6d8" font-size="44" font-weight="500" font-family="'Space Grotesk', 'Inter', 'Segoe UI', sans-serif">
+    Amarildo
+  </text>
+  <rect x="100" y="366" width="660" height="5" rx="2.5" fill="url(#glow)" />
+
+  <text x="100" y="436" fill="#d7e7f7" font-size="32" font-family="'Inter', 'Segoe UI', sans-serif">
+    Projects • Resume • Guestbook
+  </text>
+
+  <g transform="translate(100, 500)">
+    <rect width="460" height="58" rx="12" fill="#0a192b" stroke="#4cdfff" stroke-opacity="0.4" />
+    <text x="28" y="38" fill="#e9f8ff" font-size="24" font-family="'JetBrains Mono', 'Fira Code', monospace">
+      github.com/bl4ckswordsman
+    </text>
+  </g>
+</svg>
